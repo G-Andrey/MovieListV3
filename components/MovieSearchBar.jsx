@@ -39,6 +39,13 @@ const MovieSearchBar = (props) => {
     const rottenTomatoeURL = $1('.yuRUbf > a').first().attr('href')
     //console.log("rt url:", rottenTomatoeURL)
 
+    if(rottenTomatoeURL.includes("https://www.rottentomatoes.com/tv")){
+      toast({
+        message: `${srchTxt} is not a movie, will try my best`,
+        intent: 'ERROR',
+      })
+    }
+
     const responseRottenTomatoe = await fetch(rottenTomatoeURL,{
       headers: {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36'}
     });

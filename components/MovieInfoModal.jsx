@@ -29,6 +29,9 @@ const MovieInfoModal = (props) => {
                     <Text style={{textAlign:"center",marginTop:10,marginLeft:10, marginRight:10}}>
                       {props.movieObj.description}
                     </Text>
+                    <Text style={{textAlign:"center",marginTop:10,marginLeft:10, marginRight:10}}>
+                      {props.movieObj.genre}
+                    </Text>
                   </View>                 
                 </ScrollView>
                 <Button

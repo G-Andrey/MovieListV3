@@ -19,6 +19,7 @@ const MovieSearchBar = (props) => {
     var movieDesc = "";
     var watchedState = 0;
     var moviePosterUrl = "";
+    var movieGenre = "";
 
     //console.log("Starting Webscrape for:",srchTxt)
 
@@ -60,6 +61,23 @@ const MovieSearchBar = (props) => {
     moviePosterUrl = $2(".posterImage").first().attr('data-src')
     //console.log("Fetched movie poster:", $2(".posterImage").first().attr('data-src'))
     
+    //Retrieving movie genre
+    movieGenre = $2(".meta-value.genre").text().trim()
+      .replace(/\n/g, " ")
+      .replace(/ +(?= )/g,'')
+      .toLowerCase()
+      .split(' ')
+      .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+      .join(' ')
+
+    // console.log("Fetched movie genre:", $2(".meta-value.genre").text().trim()
+    // .replace(/\n/g, " ")
+    // .replace(/ +(?= )/g,'')
+    // .toLowerCase()
+    // .split(' ')
+    // .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+    // .join(' '))
+
     if (movieTitle == ""){
       toast({
         message: `Could not find ${srchTxt}`,
@@ -75,6 +93,7 @@ const MovieSearchBar = (props) => {
           rating: movieRating,
           watchedState: watchedState,  // 0 = unwatched, 1 = watched
           moviePosterUrl: moviePosterUrl,
+          genre: movieGenre,
         });
         toast({
           message: `${movieTitle} has been added`,

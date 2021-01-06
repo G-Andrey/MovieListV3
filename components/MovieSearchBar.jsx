@@ -20,6 +20,7 @@ const MovieSearchBar = (props) => {
     var watchedState = 0;
     var moviePosterUrl = "";
     var movieGenre = "";
+    var movieCast = [];
 
     //console.log("Starting Webscrape for:",srchTxt)
 
@@ -69,7 +70,6 @@ const MovieSearchBar = (props) => {
       .split(' ')
       .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
       .join(' ')
-
     // console.log("Fetched movie genre:", $2(".meta-value.genre").text().trim()
     // .replace(/\n/g, " ")
     // .replace(/ +(?= )/g,'')
@@ -77,6 +77,13 @@ const MovieSearchBar = (props) => {
     // .split(' ')
     // .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
     // .join(' '))
+    
+    movieCast.push($2(".characters.subtle.smaller")[0].attribs.title)
+    movieCast.push($2(".characters.subtle.smaller")[1].attribs.title)
+    movieCast.push($2(".characters.subtle.smaller")[2].attribs.title)
+    // console.log("Fetched movie cast:",$2(".characters.subtle.smaller")[0].attribs.title)
+    // console.log("Fetched movie cast:",$2(".characters.subtle.smaller")[1].attribs.title)
+    // console.log("Fetched movie cast:",$2(".characters.subtle.smaller")[2].attribs.title)
 
     if (movieTitle == ""){
       toast({
@@ -94,6 +101,7 @@ const MovieSearchBar = (props) => {
           watchedState: watchedState,  // 0 = unwatched, 1 = watched
           moviePosterUrl: moviePosterUrl,
           genre: movieGenre,
+          cast: movieCast,
         });
         toast({
           message: `${movieTitle} has been added`,

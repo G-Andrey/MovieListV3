@@ -32,6 +32,17 @@ const MovieInfoModal = (props) => {
                     <Text style={{textAlign:"center",marginTop:10,marginLeft:10, marginRight:10}}>
                       {props.movieObj.genre}
                     </Text>
+                    {props.movieObj.cast.length > 0 ? 
+                      props.movieObj.cast.map( character => (
+                        <Text key={character}>
+                          {character}
+                        </Text>
+                      ))
+                      :
+                      <Text>
+                        Cast Not Found
+                      </Text>
+                    }
                   </View>                 
                 </ScrollView>
                 <Button

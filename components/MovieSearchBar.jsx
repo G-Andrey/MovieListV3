@@ -21,25 +21,27 @@ const MovieSearchBar = (props) => {
     var moviePosterUrl = "";
     var movieGenre = "";
     var movieCast = [];
+    var rottenTomatoeURL = "";
+    var youtubeTrailerUrl = "";
 
     //console.log("Starting Webscrape for:",srchTxt)
 
     //Doing a google search for the movie + "+rotten+tomatoes" to find correct rottentomatoe link
-    const googleSearchUrl = "https://www.google.com/search?q=" + srchTxt.replace(" ","+") + "+rotten+tomatoes"
+    var googleSearchUrl = "https://www.google.com/search?q=" + srchTxt.replace(" ","+") + "+rotten+tomatoes"
     //console.log("googleSearchUrl",googleSearchUrl);
 
-    const responseGoogle = await fetch(googleSearchUrl,{
+    var responseGoogle = await fetch(googleSearchUrl,{
       headers: {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36'}
     });
-    const htmlOfResponse = await responseGoogle.text();
+    var htmlOfResponse = await responseGoogle.text();
 
-    const $1 = cheerio.load(htmlOfResponse);
+    var $1 = cheerio.load(htmlOfResponse);
 
     //Retrieving the rottentomatoe link for the movie
-    const rottenTomatoeURL = $1('.yuRUbf > a').first().attr('href')
+    rottenTomatoeURL = $1('.yuRUbf > a').first().attr('href')
     //console.log("rt url:", rottenTomatoeURL)
 
-    if(rottenTomatoeURL.includes("https://www.rottentomatoes.com/tv")){
+    if(!rottenTomatoeURL.includes("https://www.rottentomatoes.com/m/")){
       toast({
         message: `${srchTxt} is not a movie, will try my best`,
         intent: 'ERROR',
@@ -51,33 +53,34 @@ const MovieSearchBar = (props) => {
     });
     const htmlOfReponseRottenTomatoe = await responseRottenTomatoe.text();
 
-    const $2 = cheerio.load(htmlOfReponseRottenTomatoe)
+    $1 = cheerio.load(htmlOfReponseRottenTomatoe)
     
     //Retreiving movie title
-    movieTitle = $2(".mop-ratings-wrap__title.mop-ratings-wrap__title--top").text().trim()
+    movieTitle = $1(".mop-ratings-wrap__title.mop-ratings-wrap__title--top").text().trim()
     //console.log("Fetched movie title:",movieTitle)
 
     //Retrieving movie rating
-    movieRating = $2("span.mop-ratings-wrap__percentage").first().text().replace(/\s/g,'')
-    //console.log("Fetched rating:" , $2("span.mop-ratings-wrap__percentage").first().text().replace(/\s/g,''))
+    movieRating = $1("span.mop-ratings-wrap__percentage").first().text().replace(/\s/g,'')
+    //console.log("Fetched rating:" , $1("span.mop-ratings-wrap__percentage").first().text().replace(/\s/g,''))
 
     //Retrieving movie desc
-    movieDesc = $2("div#movieSynopsis").text().trim()
-    //console.log("Fetched desc:" , $2("div#movieSynopsis").text().trim())
+    movieDesc = $1("div#movieSynopsis").text().trim()
+    //console.log("Fetched desc:" , $1("div#movieSynopsis").text().trim())
 
     //Retrieving movie poster
-    moviePosterUrl = $2(".posterImage").first().attr('data-src')
-    //console.log("Fetched movie poster:", $2(".posterImage").first().attr('data-src'))
+    moviePosterUrl = $1(".posterImage").first().attr('data-src')
+    //console.log("Fetched movie poster:", $1(".posterImage").first().attr('data-src'))
     
     //Retrieving movie genre
-    movieGenre = $2(".meta-value.genre").text().trim()
+    movieGenre = $1(".meta-value.genre").text().trim()
       .replace(/\n/g, " ")
       .replace(/ +(?= )/g,'')
       .toLowerCase()
+      .replace(" and", ",")
       .split(' ')
       .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
       .join(' ')
-    // console.log("Fetched movie genre:", $2(".meta-value.genre").text().trim()
+    // console.log("Fetched movie genre:", $1(".meta-value.genre").text().trim()
     // .replace(/\n/g, " ")
     // .replace(/ +(?= )/g,'')
     // .toLowerCase()
@@ -85,12 +88,25 @@ const MovieSearchBar = (props) => {
     // .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
     // .join(' '))
     
-    movieCast.push($2(".characters.subtle.smaller")[0].attribs.title)
-    movieCast.push($2(".characters.subtle.smaller")[1].attribs.title)
-    movieCast.push($2(".characters.subtle.smaller")[2].attribs.title)
-    // console.log("Fetched movie cast:",$2(".characters.subtle.smaller")[0].attribs.title)
-    // console.log("Fetched movie cast:",$2(".characters.subtle.smaller")[1].attribs.title)
-    // console.log("Fetched movie cast:",$2(".characters.subtle.smaller")[2].attribs.title)
+    movieCast.push($1(".characters.subtle.smaller")[0].attribs.title)
+    movieCast.push($1(".characters.subtle.smaller")[1].attribs.title)
+    movieCast.push($1(".characters.subtle.smaller")[2].attribs.title)
+    // console.log("Fetched movie cast:",$1(".characters.subtle.smaller")[0].attribs.title)
+    // console.log("Fetched movie cast:",$1(".characters.subtle.smaller")[1].attribs.title)
+    // console.log("Fetched movie cast:",$1(".characters.subtle.smaller")[2].attribs.title)
+
+    //Retrieving youtube trailer link from google, getting the href of thhe top result
+    googleSearchUrl = "https://www.google.com/search?q=" + srchTxt.replace(" ","+") + "+youtube+trailer"
+
+    responseGoogle = await fetch(googleSearchUrl,{
+      headers: {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36'}
+    });
+
+    htmlOfResponse = await responseGoogle.text();
+
+    $1 = cheerio.load(htmlOfResponse);
+
+    youtubeTrailerUrl = $1('.yuRUbf > a').first().attr('href')
 
     if (movieTitle == ""){
       toast({
@@ -109,6 +125,8 @@ const MovieSearchBar = (props) => {
           moviePosterUrl: moviePosterUrl,
           genre: movieGenre,
           cast: movieCast,
+          rtUrl: rottenTomatoeURL,
+          trailerUrl: youtubeTrailerUrl,
         });
         toast({
           message: `${movieTitle} has been added`,

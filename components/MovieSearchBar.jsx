@@ -43,7 +43,7 @@ const MovieSearchBar = (props) => {
 
     if(!rottenTomatoeURL.includes("https://www.rottentomatoes.com/m/")){
       toast({
-        message: `${srchTxt} is not a movie, will try my best`,
+        message: `${srchTxt} is not a movie so some information may not be available`,
         intent: 'ERROR',
       })
     }

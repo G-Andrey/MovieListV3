@@ -66,7 +66,11 @@ const MovieInfoModal = (props) => {
                           GENRE
                         </Text>
                         <Text style={{textAlign:"center",color:'black'}}>
-                          {props.movieObj.genre}
+                          {props.movieObj.genre ? 
+                            props.movieObj.genre
+                            :
+                            "Could not find"
+                          }
                         </Text>
                         <Text style={{color:'black',fontStyle:'italic',fontWeight:"bold",color:"grey",marginLeft:10,fontSize:20}}>
                           Rating
@@ -112,6 +116,7 @@ const MovieInfoModal = (props) => {
                           ratingBackgroundColor='grey'
                           count={5}
                           onFinishRating={rating => props.updateUserMovieRating(rating)}
+                          starContainerStyle={{marginBottom:10}}
                         />
                       </View>                       
                     </View>

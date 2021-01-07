@@ -43,7 +43,7 @@ const MovieSearchBar = (props) => {
 
     if(!rottenTomatoeURL.includes("https://www.rottentomatoes.com/m/")){
       toast({
-        message: `${srchTxt} is not a movie, will try my best`,
+        message: `${srchTxt} is not a movie so some information may not be available`,
         intent: 'ERROR',
       })
     }
@@ -127,6 +127,7 @@ const MovieSearchBar = (props) => {
           cast: movieCast,
           rtUrl: rottenTomatoeURL,
           trailerUrl: youtubeTrailerUrl,
+          userRating: 3,
         });
         toast({
           message: `${movieTitle} has been added`,

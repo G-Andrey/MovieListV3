@@ -107,6 +107,10 @@ const MovieList = (props) => {
     })
   }
 
+  const handleUserRating = (rating) => {
+    props.setNewUserRating(currentMovie.title, rating)
+  }
+
   const renderItem = ({ item, index }) => (
     <>
     <Swipeable
@@ -153,7 +157,7 @@ const MovieList = (props) => {
               keyExtractor={item => item.title}
               contentContainerStyle={{ paddingBottom: 60}}
             />
-            <MovieInfoModal isVisible={isModalVisible} modalOff={setModalOff} movieObj={currentMovie}/>         
+            <MovieInfoModal isVisible={isModalVisible} modalOff={setModalOff} movieObj={currentMovie} updateUserMovieRating={handleUserRating}/>         
           </>
         }
     </View>

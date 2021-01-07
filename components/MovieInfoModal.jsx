@@ -64,9 +64,21 @@ const MovieInfoModal = (props) => {
                         <Text style={{color:'black',fontStyle:'italic',fontWeight:"bold",color:"grey",marginLeft:10,fontSize:20}}>
                           GENRE
                         </Text>
-                        <Text style={{textAlign:"center",color:'black',marginBottom:5}}>
+                        <Text style={{textAlign:"center",color:'black'}}>
                           {props.movieObj.genre}
                         </Text>
+                        <Text style={{color:'black',fontStyle:'italic',fontWeight:"bold",color:"grey",marginLeft:10,fontSize:20}}>
+                          Rating
+                        </Text>
+                        <View style={{flex:1,flexDirection:'row',justifyContent:"center",alignItems:'center', borderColor:'white', borderWidth:1,}}>
+                          <Image
+                            source={require('../assets/rt.png')}
+                            style={{ width: 30, height: 30, marginRight:10 }}
+                          />
+                          <Text style={{color:"red",fontWeight:"bold",fontSize:20}}>
+                            {props.movieObj.rating}
+                          </Text>
+                        </View>
                         <Text style={{color:'black',fontStyle:'italic',fontWeight:"bold",color:"grey",marginLeft:10,fontSize:20}}>
                           DESCRIPTION
                         </Text>

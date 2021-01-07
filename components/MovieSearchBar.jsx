@@ -127,6 +127,7 @@ const MovieSearchBar = (props) => {
           cast: movieCast,
           rtUrl: rottenTomatoeURL,
           trailerUrl: youtubeTrailerUrl,
+          userRating: 3,
         });
         toast({
           message: `${movieTitle} has been added`,

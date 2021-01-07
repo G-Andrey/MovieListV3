@@ -108,8 +108,10 @@ const MovieInfoModal = (props) => {
                         </Text>
                         <AirbnbRating
                           reviews={['Terrible', 'Bad', 'Decent', 'Good', 'Great']}
-                          defaultRating={3}
+                          defaultRating={props.movieObj.userRating}
                           ratingBackgroundColor='grey'
+                          count={5}
+                          onFinishRating={rating => props.updateUserMovieRating(rating)}
                         />
                       </View>                       
                     </View>

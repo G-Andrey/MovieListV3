@@ -56,6 +56,12 @@ const App = () => {
     saveMovieList(newList);
   };
 
+  const setUserRatingOfMovie = (movieTitle, ratingValue) => {
+    const newList = listOfMovies.map(mov => (mov.title === movieTitle ? {...mov, userRating: ratingValue} : mov))
+    setListOFMovies(newList)
+    saveMovieList(newList);
+  }
+
   const setAsUnWatched = (movieTitle) => {
     const newList = listOfMovies.map(mov => (mov.title === movieTitle ? {...mov, watchedState: 0} : mov))
     setListOFMovies(newList)
@@ -134,6 +140,7 @@ const App = () => {
             setUnwatched={setAsUnWatched}
             handleScrollEnd={triggerScrollToEnd}
             setScrollEndComplete={scrollToEndComplete}
+            setNewUserRating={setUserRatingOfMovie}
           />
         </View>
       </ToastProvider>

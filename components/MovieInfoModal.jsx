@@ -61,19 +61,19 @@ const MovieInfoModal = (props) => {
                     </View>
                     <View style={{flex:1,flexDirection:'row',justifyContent:"center",marginVertical:5}}>                      
                       <View>
-                        <Text style={{color:'black',fontStyle:'italic',fontWeight:"bold",color:"grey",marginLeft:5,fontSize:20}}>
+                        <Text style={{color:'black',fontStyle:'italic',fontWeight:"bold",color:"grey",marginLeft:10,fontSize:20}}>
                           GENRE
                         </Text>
                         <Text style={{textAlign:"center",color:'black',marginBottom:5}}>
                           {props.movieObj.genre}
                         </Text>
-                        <Text style={{color:'black',fontStyle:'italic',fontWeight:"bold",color:"grey",marginLeft:5,fontSize:20}}>
+                        <Text style={{color:'black',fontStyle:'italic',fontWeight:"bold",color:"grey",marginLeft:10,fontSize:20}}>
                           DESCRIPTION
                         </Text>
                         <Text style={{textAlign:"center",marginHorizontal:20,color:'black',marginBottom:5}}>
                           {props.movieObj.description}
                         </Text>
-                        <Text style={{color:'black',fontStyle:'italic',fontWeight:"bold",color:"grey",marginLeft:5,fontSize:20}}>
+                        <Text style={{color:'black',fontStyle:'italic',fontWeight:"bold",color:"grey",marginLeft:10,fontSize:20}}>
                           CAST
                         </Text>
                         <Text style={{textAlign:"center",marginHorizontal:5,color:'black',marginBottom:5}}>
@@ -90,7 +90,7 @@ const MovieInfoModal = (props) => {
                               "Cast Not Found"
                           }
                         </Text>
-                        <Text style={{color:'black',fontStyle:'italic',fontWeight:"bold",color:"grey",marginLeft:5,fontSize:20}}>
+                        <Text style={{color:'black',fontStyle:'italic',fontWeight:"bold",color:"grey",marginLeft:10,fontSize:20}}>
                           RATE MOVIE
                         </Text>
                       </View>                       

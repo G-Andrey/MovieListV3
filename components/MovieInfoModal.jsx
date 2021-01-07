@@ -2,6 +2,7 @@ import React from 'react';
 import { Linking } from 'react-native';
 import { View, Text, Modal, TouchableOpacity, ScrollView, TouchableWithoutFeedback, Image } from 'react-native';
 import { Button } from 'react-native-elements';
+import { AirbnbRating } from './react-native-ratings/src'
 
 const Seperator = () => {
   return(
@@ -105,6 +106,11 @@ const MovieInfoModal = (props) => {
                         <Text style={{color:'black',fontStyle:'italic',fontWeight:"bold",color:"grey",marginLeft:10,fontSize:20}}>
                           RATE MOVIE
                         </Text>
+                        <AirbnbRating
+                          reviews={['Terrible', 'Bad', 'Decent', 'Good', 'Great']}
+                          defaultRating={3}
+                          ratingBackgroundColor='grey'
+                        />
                       </View>                       
                     </View>
                   </View>                 

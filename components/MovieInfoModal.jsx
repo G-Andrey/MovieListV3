@@ -70,7 +70,7 @@ const MovieInfoModal = (props) => {
                         <Text style={{color:'black',fontStyle:'italic',fontWeight:"bold",color:"grey",marginLeft:5,fontSize:20}}>
                           DESCRIPTION
                         </Text>
-                        <Text style={{textAlign:"center",marginHorizontal:15,color:'black',marginBottom:5}}>
+                        <Text style={{textAlign:"center",marginHorizontal:20,color:'black',marginBottom:5}}>
                           {props.movieObj.description}
                         </Text>
                         <Text style={{color:'black',fontStyle:'italic',fontWeight:"bold",color:"grey",marginLeft:5,fontSize:20}}>

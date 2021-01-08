@@ -15,7 +15,7 @@ const RightActions = ({progress, dragX, onPress}) => {
     extrapolate: 'clamp'
   })
   return (
-    <TouchableOpacity onPress={onPress} style={{marginBottom:10}}>
+    <TouchableOpacity onPress={onPress} style={{marginBottom:5}}>
       <View style={{backgroundColor:'#ff0000', justifyContent:'center', textAlign:"center",alignItems:'flex-end',height:'100%'}}>
         <Animated.Text style={[{color:'#fff', fontWeight:'bold', paddingLeft:20,paddingRight:20, fontSize:20}, {transform: [{scale}]}]}>
           DELETE
@@ -33,7 +33,7 @@ const leftActionUnwatched = (progress, dragX) => {
     extrapolate: 'clamp'
   })
   return (
-    <View style={{backgroundColor:"green",justifyContent:"center",flex:1,marginBottom:10}}>
+    <View style={{backgroundColor:"green",justifyContent:"center",flex:1,marginBottom:5}}>
       <Animated.Text style={[{color:'#fff', fontWeight:'bold', paddingLeft:10,paddingRight:10, fontSize:20}, {transform: [{scale}]}]}>
         SET WATCHED
       </Animated.Text>
@@ -49,7 +49,7 @@ const leftActionWatched = (progress, dragX) => {
     extrapolate: 'clamp'
   })
   return (
-    <View style={{backgroundColor:"#458cff",justifyContent:"center",flex:1,marginBottom:10}}>
+    <View style={{backgroundColor:"#458cff",justifyContent:"center",flex:1,marginBottom:5}}>
       <Animated.Text style={[{color:'#fff', fontWeight:'bold', paddingLeft:10,paddingRight:10, fontSize:20}, {transform: [{scale}]}]}>
         SET UNWATCHED
       </Animated.Text>
@@ -76,7 +76,7 @@ const MovieList = (props) => {
   const handleEndScroll = () => {
     if(props.handleScrollEnd){
       console.log("scrollend?: ",props.handleScrollEnd)
-      flatListRef.current.scrollToEnd()
+      flatListRef.current.scrollToIndex({animated: true, index: 0})
       props.setScrollEndComplete()
     }
   }
@@ -124,29 +124,30 @@ const MovieList = (props) => {
       renderLeftActions={item.watchedState == 0 ? leftActionUnwatched : leftActionWatched}
       onSwipeableLeftOpen={item.watchedState == 0 ? () => handleSetWatched(item.title) : (() => handleSetUnwatched(item.title))}
       renderRightActions={(progress, dragX) => <RightActions progress={progress} dragX={dragX} onPress={() => onRightPress(item.title)}/>}
-    >
-      <Card 
-        containerStyle={[{margin:0,marginBottom:10,paddingBottom:15,paddingTop:0}, item.watchedState == 0 ? styles.unwatched : styles.watched]}
-      >
-        <TouchableOpacity onPress={() => setModalOn(item)} >
-          <Card.Title h2>
-            {item.title}
-          </Card.Title>
-        </TouchableOpacity>
-        <View style={{flexDirection: "row", paddingBottom:20,alignItems: 'center',justifyContent: 'center'}}>
-          <Image
-            source={require('../assets/rt.png')}
-            style={{ width: 40, height: 40, marginRight:10 }}
-          />
-          <Text h3 style={{color:"red"}}>
-            {item.rating}
-          </Text>
+    > 
+        <View style={[{flex:1, flexDirection:'row',height:150,borderTopColor:'white',borderBottomColor:'white',borderLeftColor:'white',borderRightColor:'white',borderWidth:1,backgroundColor:'white',marginBottom:5}, item.watchedState == 0 ? styles.unwatched : styles.watched]}>
+          <View style={{flex:.8,textAlign:'center',justifyContent:'center',marginRight:5}}>
+            <TouchableOpacity onPress={() => setModalOn(item)}>
+              <Text numberOfLines={2} style={{fontSize:30,fontWeight:"bold",marginLeft:10,textAlign:'center',marginBottom:10}}>
+                {item.title}
+              </Text>
+              <Text numberOfLines={4} style={{color:"grey",paddingBottom:5,overflow:"hidden",marginLeft:10,marginBottom:5}}>
+                {item.description}
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{width:1,height:110,borderColor:'grey',borderWidth:1,justifyContent:'center',marginTop:20,marginBottom:20,marginRight:5,marginLeft:5}}>
+          </View>
+          <View style={{flex:.2,justifyContent:'center',alignItems:'center'}}>
+            <Image
+              source={require('../assets/rt.png')}
+              style={{ width: 40, height: 40,marginBottom:10}}
+            />
+            <Text h3 style={{color:"red"}}>
+              {item.rating}
+            </Text>
+          </View>
         </View>
-        <Card.Divider/>
-        <Text>
-          {item.description}
-        </Text>
-      </Card>
     </Swipeable>
     </>
   );
@@ -163,6 +164,9 @@ const MovieList = (props) => {
               renderItem={renderItem}
               keyExtractor={item => item.title}
               contentContainerStyle={{ paddingBottom: 60}}
+              getItemLayout={(data, index) => (
+                {length: 150, offset: 0, index}
+              )}
             />
             <MovieInfoModal isVisible={isModalVisible} modalOff={setModalOff} movieObj={currentMovie} updateUserMovieRating={handleUserRating}/>         
           </>

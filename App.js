@@ -7,7 +7,6 @@ import MovieList from './components/MovieList';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { ToastProvider } from 'react-native-styled-toast';
 import { ThemeProvider } from 'styled-components';
-import { useToast } from 'react-native-styled-toast'
 import theme from './components/theme'
 
 const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : StatusBar.currentHeight - 1;
@@ -35,7 +34,7 @@ const App = () => {
   }
 
   const addMovieToList = (newMovieObj) => {
-    const newList = [...listOfMovies, newMovieObj]
+    const newList = [newMovieObj, ...listOfMovies]
     setListOFMovies(newList);
     saveMovieList(newList);
     setFilteredState(2);

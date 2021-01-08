@@ -96,7 +96,10 @@ const MovieList = (props) => {
   const handleSetWatched = (movieTitle) => {
     props.setWatched(movieTitle)
     toast({
-      message: `${movieTitle} set as watched`
+      message: `${movieTitle} set as watched`,
+      iconColor: '#7DBE31',
+      iconFamily: 'Ionicons',
+      iconName: 'eye',
     })
   }
 
@@ -104,6 +107,10 @@ const MovieList = (props) => {
     props.setUnwatched(movieTitle)
     toast({
       message: `${movieTitle} set as unwatched`,
+      iconColor: '#458cff',
+      iconFamily: 'Ionicons',
+      iconName: 'eye-off',
+      accentColor: '#458cff',
     })
   }
 

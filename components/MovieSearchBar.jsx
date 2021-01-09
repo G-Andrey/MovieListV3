@@ -14,6 +14,7 @@ const MovieSearchBar = (props) => {
   };
 
   const webScrapeMovieData = async(srchTxt) => {
+    props.triggerLoading()
     var movieTitle = "";
     var movieRating = "";
     var movieDesc = "";
@@ -50,6 +51,15 @@ const MovieSearchBar = (props) => {
           iconName: 'exclamation-thick',
           accentColor: '#f8fc03',
         })
+      }
+
+      if(!rottenTomatoeURL.includes("https://www.rottentomatoes.com/")){
+        toast({
+          message: `Could not find the right rotten tomatoes url for "${srchTxt}"`,
+          intent: 'ERROR',
+        })
+        props.cancelMovieLoading()
+        return
       }
 
       const responseRottenTomatoe = await fetch(rottenTomatoeURL,{
@@ -117,6 +127,7 @@ const MovieSearchBar = (props) => {
           message: `Could not find ${srchTxt}`,
           intent: 'ERROR',
         })
+        props.cancelMovieLoading()
       }
       else{
         //checks if newly scraped movie title is already in the list
@@ -141,6 +152,7 @@ const MovieSearchBar = (props) => {
           toast({
             message: `${movieTitle} is already on the list`,
           });
+          props.cancelMovieLoading()
         }
       }
     }
@@ -150,6 +162,7 @@ const MovieSearchBar = (props) => {
         message: `Could not find "${srchTxt}"`,
         intent: 'ERROR',
       })
+      props.cancelMovieLoading()
     }
   };
 

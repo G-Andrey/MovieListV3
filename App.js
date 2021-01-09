@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, StatusBar} from 'react-native';
+import { View, StyleSheet, StatusBar, ActivityIndicator, Text} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MovieSearchBar from './components/MovieSearchBar';
 import ButtonBar from './components/ButtonBar';
@@ -28,17 +28,26 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [filteredState, setFilteredState] = useState(2);   //0 = All, 1 = watched, 2 = unwatched
   const [triggerScrollToEnd, setTriggerScrollToEnd] = useState(false);
+  const [isLoadingMovie, setIsLoadingMovie] = useState(false);
 
   const scrollToEndComplete = () => {
     setTriggerScrollToEnd(false);
   }
 
+  const triggerLoadingMovieIndicator = () => {
+    setIsLoadingMovie(true);
+  }
+
+  const cancelLoadingMovieIndicator = () => {
+    setIsLoadingMovie(false);
+  }
   const addMovieToList = (newMovieObj) => {
     const newList = [newMovieObj, ...listOfMovies]
     setListOFMovies(newList);
     saveMovieList(newList);
     setFilteredState(2);
     setTriggerScrollToEnd(true);
+    setIsLoadingMovie(false)
   };
 
   const setWatchedFiltered = () =>{
@@ -118,7 +127,7 @@ const App = () => {
             overlayColor="rgba(0, 0, 0, 0.75)"
           />
           <MyStatusBar backgroundColor='rgba(22,7,92,1)'/>
-          <MovieSearchBar addMovie={addMovieToList} currentMovieList={listOfMovies} />
+          <MovieSearchBar addMovie={addMovieToList} currentMovieList={listOfMovies} triggerLoading={triggerLoadingMovieIndicator} cancelMovieLoading={cancelLoadingMovieIndicator}/>
           <ButtonBar 
             filterWatched={setWatchedFiltered} 
             filterUnwatched={setUnwatchedFiltered} 
@@ -126,6 +135,16 @@ const App = () => {
           />
           <View style={{borderBottomColor: 'grey',borderBottomWidth: 2}}>
           </View>
+          {isLoadingMovie ? 
+            <View style={{flexDirection:'row',backgroundColor:'#bababa',paddingTop:5,paddingBottom:5,justifyContent:"center",alignItems:"center"}}>
+              <ActivityIndicator size="large" color="#fff" animating={true} style={{marginRight:10}} />
+              <Text style={{color:"#fff",fontWeight:"bold",fontSize:15}}>
+                Searching for Movie
+              </Text>
+            </View>
+            : 
+            null
+          }
           <MovieList 
             allMoviesList={
               filteredState == 1 ?

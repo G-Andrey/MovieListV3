@@ -150,7 +150,15 @@ const MovieList = (props) => {
               }
               style={{ width: 40, height: 40,marginBottom:10}}
             />
-            <Text h3 style={{color:"red"}}>
+            <Text h3 style={[
+              parseInt(item.rating.replace("%",'')) <= 60 ? 
+                {color:"#0ec654"} 
+              :
+              parseInt(item.rating.replace("%",'')) > 60 && parseInt(item.rating.replace("%",'')) <= 90 ? 
+                {color:"#f92e02"}
+              :
+                {color:"#ffd600"}
+              ]}>
               {item.rating}
             </Text>
           </View>
@@ -172,7 +180,7 @@ const MovieList = (props) => {
               keyExtractor={item => item.title}
               contentContainerStyle={{ paddingBottom: 60}}
               getItemLayout={(data, index) => (
-                {length: 150, offset: 0, index}
+                {length: 150, offset: 155 * index, index}
               )}
               initialNumToRender={5}
             />

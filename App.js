@@ -117,7 +117,6 @@ const App = () => {
             textStyle={{color: '#FFF', fontSize:35, fontWeight:'bold'}}
             overlayColor="rgba(0, 0, 0, 0.75)"
           />
-          {console.log("all movies: ", listOfMovies)}
           <MyStatusBar backgroundColor='rgba(22,7,92,1)'/>
           <MovieSearchBar addMovie={addMovieToList} currentMovieList={listOfMovies} />
           <ButtonBar 
@@ -125,6 +124,8 @@ const App = () => {
             filterUnwatched={setUnwatchedFiltered} 
             currentFilteredState={filteredState}
           />
+          <View style={{borderBottomColor: 'grey',borderBottomWidth: 2}}>
+          </View>
           <MovieList 
             allMoviesList={
               filteredState == 1 ?

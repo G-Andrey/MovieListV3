@@ -75,7 +75,6 @@ const MovieList = (props) => {
 
   const handleEndScroll = () => {
     if(props.handleScrollEnd){
-      console.log("scrollend?: ",props.handleScrollEnd)
       flatListRef.current.scrollToIndex({animated: true, index: 0})
       props.setScrollEndComplete()
     }
@@ -125,7 +124,7 @@ const MovieList = (props) => {
       onSwipeableLeftOpen={item.watchedState == 0 ? () => handleSetWatched(item.title) : (() => handleSetUnwatched(item.title))}
       renderRightActions={(progress, dragX) => <RightActions progress={progress} dragX={dragX} onPress={() => onRightPress(item.title)}/>}
     > 
-        <View style={[{flex:1, flexDirection:'row',height:150,borderTopColor:'white',borderBottomColor:'white',borderLeftColor:'white',borderRightColor:'white',borderWidth:1,backgroundColor:'white',marginBottom:5}, item.watchedState == 0 ? styles.unwatched : styles.watched]}>
+        <View style={[{flex:1, flexDirection:'row',height:150,borderTopColor:'white',borderBottomColor:'white',borderLeftColor:'white',borderRightColor:'white',borderWidth:1,backgroundColor:'white',marginBottom:5}]}>
           <View style={{flex:.8,textAlign:'center',justifyContent:'center',marginRight:5}}>
             <TouchableOpacity onPress={() => setModalOn(item)}>
               <Text numberOfLines={2} style={{fontSize:30,fontWeight:"bold",marginLeft:10,textAlign:'center',marginBottom:10}}>
@@ -167,6 +166,7 @@ const MovieList = (props) => {
               getItemLayout={(data, index) => (
                 {length: 150, offset: 0, index}
               )}
+              initialNumToRender={5}
             />
             <MovieInfoModal isVisible={isModalVisible} modalOff={setModalOff} movieObj={currentMovie} updateUserMovieRating={handleUserRating}/>         
           </>

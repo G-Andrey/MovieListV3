@@ -139,7 +139,15 @@ const MovieList = (props) => {
           </View>
           <View style={{flex:.2,justifyContent:'center',alignItems:'center'}}>
             <Image
-              source={require('../assets/rt.png')}
+              source={
+                parseInt(item.rating.replace("%",'')) >= 0 && parseInt(item.rating.replace("%",'')) <= 60 ? 
+                  require('../assets/rt-rotten.png')
+                :
+                parseInt(item.rating.replace("%",'')) > 60 && parseInt(item.rating.replace("%",'')) <= 90 ?
+                  require('../assets/rt.png')
+                :
+                require('../assets/rt-certified-fresh.png')
+              }
               style={{ width: 40, height: 40,marginBottom:10}}
             />
             <Text h3 style={{color:"red"}}>

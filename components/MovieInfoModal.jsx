@@ -75,7 +75,7 @@ const MovieInfoModal = (props) => {
                         <Text style={styles.sectionLabel}>
                           Rating
                         </Text>
-                        <View style={{flex:1,flexDirection:'row',justifyContent:"center",alignItems:'center', borderColor:'white', borderWidth:1,}}>
+                        <View style={styles.ratingContainer}>
                           <Image
                             source={
                               parseInt(props.movieObj.rating) >= 0 && parseInt(props.movieObj.rating) <= 60 ? 
@@ -103,13 +103,13 @@ const MovieInfoModal = (props) => {
                         <Text style={styles.sectionLabel}>
                           DESCRIPTION
                         </Text>
-                        <Text style={{textAlign:"center",marginHorizontal:20,color:'black',marginBottom:5}}>
+                        <Text style={styles.descriptionText}>
                           {props.movieObj.description}
                         </Text>
                         <Text style={styles.sectionLabel}>
                           CAST
                         </Text>
-                        <Text style={{textAlign:"center",marginHorizontal:5,color:'black',marginBottom:5}}>
+                        <Text style={styles.castText}>
                           {props.movieObj.cast ? 
                             props.movieObj.cast.map( (character, index) => {
                                 if(index != props.movieObj.cast.length - 1){
@@ -213,6 +213,26 @@ const styles = StyleSheet.create({
     color:"grey",
     marginLeft:10,
     fontSize:20
+  },
+  descriptionText: {
+    textAlign:"center",
+    marginHorizontal:20,
+    color:'black',
+    marginBottom:5
+  },
+  castText: {
+    textAlign:"center",
+    marginHorizontal:5,
+    color:'black',
+    marginBottom:5
+  },
+  ratingContainer: {
+    flex:1,
+    flexDirection:'row',
+    justifyContent:"center",
+    alignItems:'center', 
+    borderColor:'white', 
+    borderWidth:1,
   }
 })
 

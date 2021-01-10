@@ -143,7 +143,7 @@ const App = () => {
             textStyle={{color: '#FFF', fontSize:35, fontWeight:'bold'}}
             overlayColor="rgba(0, 0, 0, 0.75)"
           />
-          <MyStatusBar backgroundColor='rgba(22,7,92,1)'/>
+          <MyStatusBar backgroundColor='grey'/>
           <MovieSearchBar addMovie={addMovieToList} currentMovieList={listOfMovies} triggerLoading={triggerLoadingMovieIndicator} cancelMovieLoading={cancelLoadingMovieIndicator}/>
           <ButtonBar 
             filterWatched={setWatchedFiltered} 

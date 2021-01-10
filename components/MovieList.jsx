@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
     borderWidth:2
   },
   componentContainerView:{
-    height:'85%',
+    height:'86.85%',
     backgroundColor:"#212121"
   },
   rowView: {

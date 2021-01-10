@@ -15,6 +15,23 @@ const styles = StyleSheet.create({
   statusBar: {
     height: STATUSBAR_HEIGHT,
   },
+  loadingTab: {
+    flexDirection:'row',
+    backgroundColor:'grey',
+    paddingTop:5,
+    paddingBottom:5,
+    justifyContent:"center",
+    alignItems:"center"
+  },
+  loadingText: {
+    color:"#fff",
+    fontWeight:"bold",
+    fontSize:15
+  },
+  filteredTabSeperator: {
+    borderBottomColor: 'grey',
+    borderBottomWidth: 2
+  }
 });
 
 const MyStatusBar = ({backgroundColor, ...props}) => (
@@ -133,12 +150,12 @@ const App = () => {
             filterUnwatched={setUnwatchedFiltered} 
             currentFilteredState={filteredState}
           />
-          <View style={{borderBottomColor: 'grey',borderBottomWidth: 2}}>
+          <View style={styles.filteredTabSeperator}>
           </View>
           {isLoadingMovie ? 
-            <View style={{flexDirection:'row',backgroundColor:'grey',paddingTop:5,paddingBottom:5,justifyContent:"center",alignItems:"center"}}>
+            <View style={styles.loadingTab}>
               <ActivityIndicator size="large" color="#fff" animating={true} style={{marginRight:10}} />
-              <Text style={{color:"#fff",fontWeight:"bold",fontSize:15}}>
+              <Text style={styles.loadingText}>
                 Searching for Movie
               </Text>
             </View>

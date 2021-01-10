@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, FlatList, Image, Animated, TouchableOpacity, StyleSheet } from 'react-native';
-import { Card, Text } from 'react-native-elements';
+import { Text } from 'react-native-elements';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import IconDelete from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconEye from 'react-native-vector-icons/Ionicons';
@@ -124,20 +124,20 @@ const MovieList = (props) => {
       onSwipeableLeftOpen={item.watchedState == 0 ? () => handleSetWatched(item.title) : (() => handleSetUnwatched(item.title))}
       renderRightActions={(progress, dragX) => <RightActions progress={progress} dragX={dragX} onPress={() => onRightPress(item.title)}/>}
     > 
-        <View style={[{flex:1, flexDirection:'row',height:150,backgroundColor:'#616161',marginBottom:5}]}>
-          <View style={{flex:.8,textAlign:'center',justifyContent:'center',marginRight:5}}>
+        <View style={styles.rowView}>
+          <View style={styles.titleAndDescriptionContainer}>
             <TouchableOpacity onPress={() => setModalOn(item)}>
-              <Text numberOfLines={2} style={{fontSize:30,fontWeight:"bold",marginLeft:10,textAlign:'center',marginBottom:10,color:"white"}}>
+              <Text numberOfLines={2} style={styles.titleText}>
                 {item.title}
               </Text>
-              <Text numberOfLines={4} style={{color:"#d4d4d4",paddingBottom:5,overflow:"hidden",marginLeft:10,marginBottom:5}}>
+              <Text numberOfLines={4} style={styles.descriptionText}>
                 {item.description}
               </Text>
             </TouchableOpacity>
           </View>
-          <View style={{width:1,height:110,borderColor:'white',borderWidth:1,justifyContent:'center',marginTop:20,marginBottom:20,marginRight:5,marginLeft:5}}>
+          <View style={styles.verticalSeperator}>
           </View>
-          <View style={{flex:.2,justifyContent:'center',alignItems:'center'}}>
+          <View style={styles.ratingContainer}>
             <Image
               source={
                 parseInt(item.rating) >= 0 && parseInt(item.rating) <= 60 ? 
@@ -148,7 +148,7 @@ const MovieList = (props) => {
                 :
                 require('../assets/rt-certified-fresh.png')
               }
-              style={{ width: 40, height: 40,marginBottom:10}}
+              style={styles.rtImage}
             />
             <Text h3 style={[
               parseInt(item.rating) <= 60 ? 
@@ -168,7 +168,7 @@ const MovieList = (props) => {
   );
 
   return(
-    <View style={{height:'85%',backgroundColor:"#212121"}}>
+    <View style={styles.componentContainerView}>
         {props.allMoviesList.length == 0 ? 
             <NoMoviesFound/>
           :
@@ -192,13 +192,66 @@ const MovieList = (props) => {
 }
 
 const styles = StyleSheet.create({
-  watched : {
+  watched: {
     borderBottomColor:"green",
     borderWidth:2
   },
-  unwatched : {
+  unwatched: {
     borderBottomColor:"blue",
     borderWidth:2
+  },
+  componentContainerView:{
+    height:'85%',
+    backgroundColor:"#212121"
+  },
+  rowView: {
+    flex:1, 
+    flexDirection:'row',
+    height:150,
+    backgroundColor:'#616161',
+    marginBottom:5
+  },
+  titleAndDescriptionContainer: {
+    flex:.8,
+    textAlign:'center',
+    justifyContent:'center',
+    marginRight:5
+  },
+  titleText: {
+    fontSize:30,
+    fontWeight:"bold",
+    marginLeft:10,
+    textAlign:'center',
+    marginBottom:10,
+    color:"white"
+  },
+  descriptionText: {
+    color:"#d4d4d4",
+    paddingBottom:5,
+    overflow:"hidden",
+    marginLeft:10,
+    marginBottom:5
+  },
+  verticalSeperator: {
+    width:1,
+    height:110,
+    borderColor:'white',
+    borderWidth:1,
+    justifyContent:'center',
+    marginTop:20,
+    marginBottom:20,
+    marginRight:5,
+    marginLeft:5
+  },
+  ratingContainer: {
+    flex:.2,
+    justifyContent:'center',
+    alignItems:'center'
+  },
+  rtImage: {
+    width: 40, 
+    height: 40,
+    marginBottom:10
   }
 });
 

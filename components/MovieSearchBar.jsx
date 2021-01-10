@@ -171,7 +171,8 @@ const MovieSearchBar = (props) => {
           value={movieSearchText}
           onSubmitEditing={()=> handleSearchSubmit()}
           searchIcon={{ size: 25 }}
-          containerStyle={{borderBottomColor: 'transparent'}}
+          containerStyle={{borderBottomColor: 'transparent',backgroundColor:'grey'}}
+          leftIconContainerStyle={{color:"white"}}
           round
         />
       </View>

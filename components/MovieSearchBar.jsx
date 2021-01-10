@@ -1,6 +1,6 @@
 import { SearchBar, Tooltip, Text } from 'react-native-elements';
 import React, { useState } from 'react';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import cheerio from 'cheerio-without-node-native';
 import { useToast } from 'react-native-styled-toast'
 
@@ -138,7 +138,7 @@ const MovieSearchBar = (props) => {
             cast: movieCast,
             rtUrl: rottenTomatoeURL,
             trailerUrl: youtubeTrailerUrl,
-            userRating: 3,
+            userRating: 5,
           });
           toast({
             message: `${movieTitle} has been added`,
@@ -171,13 +171,20 @@ const MovieSearchBar = (props) => {
           value={movieSearchText}
           onSubmitEditing={()=> handleSearchSubmit()}
           searchIcon={{ size: 25 }}
-          containerStyle={{borderBottomColor: 'transparent',backgroundColor:'grey'}}
-          leftIconContainerStyle={{color:"white"}}
+          containerStyle={styles.searchContainer}
           round
         />
       </View>
     </>
   )
 };
+
+const styles = StyleSheet.create({
+  searchContainer: {
+    borderBottomColor: 'transparent',
+    backgroundColor:'grey',
+    paddingBottom:0
+  }
+})
 
 export default MovieSearchBar;

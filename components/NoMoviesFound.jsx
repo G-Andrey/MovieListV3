@@ -12,11 +12,11 @@ class NoMoviesFound extends React.Component {
     this.animatedValue.setValue(0);
     Animated.timing(this.animatedValue,
         {
-            toValue: 1, 
-            duration: 150,
-            easing: Easing.linear,
-            useNativeDriver: true,
-            delay:100
+          toValue: 1, 
+          duration: 150,
+          easing: Easing.linear,
+          useNativeDriver: true,
+          delay:100
         }
     ).start(() => this.handleAnimation());
   }
@@ -32,8 +32,8 @@ class NoMoviesFound extends React.Component {
           style={{fontSize:100,textAlign:'center',justifyContent:'center',
             transform: [{
               translateX: this.animatedValue.interpolate({
-                  inputRange: [0, 0.25, 0.50, 0.75, 1],
-                  outputRange: [10, 20, 10, 20, 10]
+                inputRange: [0, 0.25, 0.50, 0.75, 1],
+                outputRange: [10, 20, 10, 20, 10]
               })
             }]
           }}>

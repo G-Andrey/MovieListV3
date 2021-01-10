@@ -140,10 +140,10 @@ const MovieList = (props) => {
           <View style={{flex:.2,justifyContent:'center',alignItems:'center'}}>
             <Image
               source={
-                parseInt(item.rating.replace("%",'')) >= 0 && parseInt(item.rating.replace("%",'')) <= 60 ? 
+                parseInt(item.rating) >= 0 && parseInt(item.rating) <= 60 ? 
                   require('../assets/rt-rotten.png')
                 :
-                parseInt(item.rating.replace("%",'')) > 60 && parseInt(item.rating.replace("%",'')) <= 90 ?
+                parseInt(item.rating) > 60 && parseInt(item.rating) <= 90 ?
                   require('../assets/rt.png')
                 :
                 require('../assets/rt-certified-fresh.png')
@@ -151,10 +151,10 @@ const MovieList = (props) => {
               style={{ width: 40, height: 40,marginBottom:10}}
             />
             <Text h3 style={[
-              parseInt(item.rating.replace("%",'')) <= 60 ? 
+              parseInt(item.rating) <= 60 ? 
                 {color:"#0ec654"} 
               :
-              parseInt(item.rating.replace("%",'')) > 60 && parseInt(item.rating.replace("%",'')) <= 90 ? 
+              parseInt(item.rating) > 60 && parseInt(item.rating) <= 90 ? 
                 {color:"#f92e02"}
               :
                 {color:"#ffd600"}

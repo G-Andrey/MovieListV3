@@ -77,10 +77,26 @@ const MovieInfoModal = (props) => {
                         </Text>
                         <View style={{flex:1,flexDirection:'row',justifyContent:"center",alignItems:'center', borderColor:'white', borderWidth:1,}}>
                           <Image
-                            source={require('../assets/rt.png')}
+                            source={
+                              parseInt(props.movieObj.rating) >= 0 && parseInt(props.movieObj.rating) <= 60 ? 
+                                require('../assets/rt-rotten.png')
+                              :
+                              parseInt(props.movieObj.rating) > 60 && parseInt(props.movieObj.rating) <= 90 ?
+                                require('../assets/rt.png')
+                              :
+                              require('../assets/rt-certified-fresh.png')
+                            }
                             style={{ width: 30, height: 30, marginRight:10 }}
                           />
-                          <Text style={{color:"red",fontWeight:"bold",fontSize:20}}>
+                          <Text style={[{color:"red",fontWeight:"bold",fontSize:20}, 
+                            parseInt(props.movieObj.rating) <= 60 ? 
+                              {color:"#0ec654"} 
+                            :
+                            parseInt(props.movieObj.rating) > 60 && parseInt(props.movieObj.rating) <= 90 ? 
+                              {color:"#f92e02"}
+                            :
+                              {color:"#ffd600"}
+                          ]}>
                             {props.movieObj.rating}
                           </Text>
                         </View>

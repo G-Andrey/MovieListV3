@@ -26,11 +26,8 @@ const MovieSearchBar = (props) => {
     var youtubeTrailerUrl = "";
 
     try{
-      //console.log("Starting Webscrape for:",srchTxt)
-
       //Doing a google search for the movie + "+rotten+tomatoes" to find correct rottentomatoe link
       var googleSearchUrl = "https://www.google.com/search?q=" + srchTxt.replace(" ","+") + "+rotten+tomatoes"
-      //console.log("googleSearchUrl",googleSearchUrl);
 
       var responseGoogle = await fetch(googleSearchUrl,{
         headers: {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36'}
@@ -41,7 +38,6 @@ const MovieSearchBar = (props) => {
 
       //Retrieving the rottentomatoe link for the movie
       rottenTomatoeURL = $1('.yuRUbf > a').first().attr('href')
-      //console.log("rt url:", rottenTomatoeURL)
 
       if(!rottenTomatoeURL.includes("https://www.rottentomatoes.com/m/")){
         toast({

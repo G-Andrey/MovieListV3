@@ -1,4 +1,4 @@
-import { SearchBar, Tooltip, Text } from 'react-native-elements';
+import { SearchBar } from 'react-native-elements';
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import cheerio from 'cheerio-without-node-native';

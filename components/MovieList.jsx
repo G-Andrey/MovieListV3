@@ -124,18 +124,18 @@ const MovieList = (props) => {
       onSwipeableLeftOpen={item.watchedState == 0 ? () => handleSetWatched(item.title) : (() => handleSetUnwatched(item.title))}
       renderRightActions={(progress, dragX) => <RightActions progress={progress} dragX={dragX} onPress={() => onRightPress(item.title)}/>}
     > 
-        <View style={[{flex:1, flexDirection:'row',height:150,borderTopColor:'white',borderBottomColor:'white',borderLeftColor:'white',borderRightColor:'white',borderWidth:1,backgroundColor:'white',marginBottom:5}]}>
+        <View style={[{flex:1, flexDirection:'row',height:150,backgroundColor:'#616161',marginBottom:5}]}>
           <View style={{flex:.8,textAlign:'center',justifyContent:'center',marginRight:5}}>
             <TouchableOpacity onPress={() => setModalOn(item)}>
-              <Text numberOfLines={2} style={{fontSize:30,fontWeight:"bold",marginLeft:10,textAlign:'center',marginBottom:10}}>
+              <Text numberOfLines={2} style={{fontSize:30,fontWeight:"bold",marginLeft:10,textAlign:'center',marginBottom:10,color:"white"}}>
                 {item.title}
               </Text>
-              <Text numberOfLines={4} style={{color:"grey",paddingBottom:5,overflow:"hidden",marginLeft:10,marginBottom:5}}>
+              <Text numberOfLines={4} style={{color:"#d4d4d4",paddingBottom:5,overflow:"hidden",marginLeft:10,marginBottom:5}}>
                 {item.description}
               </Text>
             </TouchableOpacity>
           </View>
-          <View style={{width:1,height:110,borderColor:'grey',borderWidth:1,justifyContent:'center',marginTop:20,marginBottom:20,marginRight:5,marginLeft:5}}>
+          <View style={{width:1,height:110,borderColor:'white',borderWidth:1,justifyContent:'center',marginTop:20,marginBottom:20,marginRight:5,marginLeft:5}}>
           </View>
           <View style={{flex:.2,justifyContent:'center',alignItems:'center'}}>
             <Image
@@ -168,7 +168,7 @@ const MovieList = (props) => {
   );
 
   return(
-    <View style={{height:'85%',backgroundColor:"#bababa"}}>
+    <View style={{height:'85%',backgroundColor:"#212121"}}>
         {props.allMoviesList.length == 0 ? 
             <NoMoviesFound/>
           :

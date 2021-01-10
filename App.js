@@ -136,7 +136,7 @@ const App = () => {
           <View style={{borderBottomColor: 'grey',borderBottomWidth: 2}}>
           </View>
           {isLoadingMovie ? 
-            <View style={{flexDirection:'row',backgroundColor:'#bababa',paddingTop:5,paddingBottom:5,justifyContent:"center",alignItems:"center"}}>
+            <View style={{flexDirection:'row',backgroundColor:'grey',paddingTop:5,paddingBottom:5,justifyContent:"center",alignItems:"center"}}>
               <ActivityIndicator size="large" color="#fff" animating={true} style={{marginRight:10}} />
               <Text style={{color:"#fff",fontWeight:"bold",fontSize:15}}>
                 Searching for Movie

@@ -39,6 +39,15 @@ const MovieSearchBar = (props) => {
       //Retrieving the rottentomatoe link for the movie
       rottenTomatoeURL = $1('.yuRUbf > a').first().attr('href')
 
+      if(!rottenTomatoeURL.includes("https://www.rottentomatoes.com/")){
+        toast({
+          message: `Could not find the right rotten tomatoes url for "${srchTxt}"`,
+          intent: 'ERROR',
+        })
+        props.cancelMovieLoading()
+        return
+      }
+
       if(!rottenTomatoeURL.includes("https://www.rottentomatoes.com/m/")){
         toast({
           message: `"${srchTxt}" is not a movie so some information may not be available`,
@@ -47,15 +56,6 @@ const MovieSearchBar = (props) => {
           iconName: 'exclamation-thick',
           accentColor: '#f8fc03',
         })
-      }
-
-      if(!rottenTomatoeURL.includes("https://www.rottentomatoes.com/")){
-        toast({
-          message: `Could not find the right rotten tomatoes url for "${srchTxt}"`,
-          intent: 'ERROR',
-        })
-        props.cancelMovieLoading()
-        return
       }
 
       const responseRottenTomatoe = await fetch(rottenTomatoeURL,{

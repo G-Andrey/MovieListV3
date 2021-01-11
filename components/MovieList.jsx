@@ -75,7 +75,7 @@ const MovieList = (props) => {
 
   const handleEndScroll = () => {
     if(props.handleScrollEnd){
-      //flatListRef.current.scrollToIndex({animated: true, index: 1})
+      flatListRef.current.scrollToIndex({animated: false, index: 0})
       props.setScrollEndComplete()
     }
   }
@@ -182,7 +182,6 @@ const MovieList = (props) => {
               getItemLayout={(data, index) => (
                 {length: 150, offset: 155 * index, index}
               )}
-              initialNumToRender={9}
               extraData={props.allMoviesList}
               initialScrollIndex={0}
             />

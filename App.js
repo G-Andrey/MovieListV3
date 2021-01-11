@@ -76,9 +76,13 @@ const App = () => {
   };
 
   const setAsWatched = (movieTitle) => {
-    const newList = listOfMovies.map(mov => (mov.title === movieTitle ? {...mov, watchedState: 1} : mov))
-    setListOFMovies(newList)
-    saveMovieList(newList);
+    // const newList = listOfMovies.map(mov => (mov.title === movieTitle ? {...mov, watchedState: 1} : mov))
+    // setListOFMovies(newList)
+    // saveMovieList(newList);
+    var data = [...listOfMovies];
+    var index = data.findIndex(obj => obj.title === movieTitle);
+    data[index].watchedState = 1;
+    setListOFMovies(data);
   };
 
   const setUserRatingOfMovie = (movieTitle, ratingValue) => {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, StatusBar} from 'react-native';
+import { View, StyleSheet, StatusBar, ActivityIndicator, Text} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MovieSearchBar from './components/MovieSearchBar';
 import ButtonBar from './components/ButtonBar';
@@ -7,7 +7,6 @@ import MovieList from './components/MovieList';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { ToastProvider } from 'react-native-styled-toast';
 import { ThemeProvider } from 'styled-components';
-import { useToast } from 'react-native-styled-toast'
 import theme from './components/theme'
 
 const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : StatusBar.currentHeight - 1;
@@ -16,6 +15,23 @@ const styles = StyleSheet.create({
   statusBar: {
     height: STATUSBAR_HEIGHT,
   },
+  loadingTab: {
+    flexDirection:'row',
+    backgroundColor:'grey',
+    paddingTop:5,
+    paddingBottom:5,
+    justifyContent:"center",
+    alignItems:"center"
+  },
+  loadingText: {
+    color:"#fff",
+    fontWeight:"bold",
+    fontSize:15
+  },
+  filteredTabSeperator: {
+    borderBottomColor: 'grey',
+    borderBottomWidth: 2
+  }
 });
 
 const MyStatusBar = ({backgroundColor, ...props}) => (
@@ -29,17 +45,26 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [filteredState, setFilteredState] = useState(2);   //0 = All, 1 = watched, 2 = unwatched
   const [triggerScrollToEnd, setTriggerScrollToEnd] = useState(false);
+  const [isLoadingMovie, setIsLoadingMovie] = useState(false);
 
   const scrollToEndComplete = () => {
     setTriggerScrollToEnd(false);
   }
 
+  const triggerLoadingMovieIndicator = () => {
+    setIsLoadingMovie(true);
+  }
+
+  const cancelLoadingMovieIndicator = () => {
+    setIsLoadingMovie(false);
+  }
   const addMovieToList = (newMovieObj) => {
-    const newList = [...listOfMovies, newMovieObj]
+    const newList = [newMovieObj, ...listOfMovies]
     setListOFMovies(newList);
     saveMovieList(newList);
     setFilteredState(2);
     setTriggerScrollToEnd(true);
+    setIsLoadingMovie(false)
   };
 
   const setWatchedFiltered = () =>{
@@ -118,14 +143,25 @@ const App = () => {
             textStyle={{color: '#FFF', fontSize:35, fontWeight:'bold'}}
             overlayColor="rgba(0, 0, 0, 0.75)"
           />
-          {console.log("all movies: ", listOfMovies)}
-          <MyStatusBar backgroundColor='rgba(22,7,92,1)'/>
-          <MovieSearchBar addMovie={addMovieToList} currentMovieList={listOfMovies} />
+          <MyStatusBar backgroundColor='grey'/>
+          <MovieSearchBar addMovie={addMovieToList} currentMovieList={listOfMovies} triggerLoading={triggerLoadingMovieIndicator} cancelMovieLoading={cancelLoadingMovieIndicator}/>
           <ButtonBar 
             filterWatched={setWatchedFiltered} 
             filterUnwatched={setUnwatchedFiltered} 
             currentFilteredState={filteredState}
           />
+          <View style={styles.filteredTabSeperator}>
+          </View>
+          {isLoadingMovie ? 
+            <View style={styles.loadingTab}>
+              <ActivityIndicator size="large" color="#fff" animating={true} style={{marginRight:10}} />
+              <Text style={styles.loadingText}>
+                Searching for Movie
+              </Text>
+            </View>
+            : 
+            null
+          }
           <MovieList 
             allMoviesList={
               filteredState == 1 ?

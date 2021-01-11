@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, FlatList, Image, Animated, TouchableOpacity, StyleSheet } from 'react-native';
-import { Card, Text } from 'react-native-elements';
+import { Text } from 'react-native-elements';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import IconDelete from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconEye from 'react-native-vector-icons/Ionicons';
@@ -15,7 +15,7 @@ const RightActions = ({progress, dragX, onPress}) => {
     extrapolate: 'clamp'
   })
   return (
-    <TouchableOpacity onPress={onPress} style={{marginBottom:10}}>
+    <TouchableOpacity onPress={onPress} style={{marginBottom:5}}>
       <View style={{backgroundColor:'#ff0000', justifyContent:'center', textAlign:"center",alignItems:'flex-end',height:'100%'}}>
         <Animated.Text style={[{color:'#fff', fontWeight:'bold', paddingLeft:20,paddingRight:20, fontSize:20}, {transform: [{scale}]}]}>
           DELETE
@@ -33,7 +33,7 @@ const leftActionUnwatched = (progress, dragX) => {
     extrapolate: 'clamp'
   })
   return (
-    <View style={{backgroundColor:"green",justifyContent:"center",flex:1,marginBottom:10}}>
+    <View style={{backgroundColor:"green",justifyContent:"center",flex:1,marginBottom:5}}>
       <Animated.Text style={[{color:'#fff', fontWeight:'bold', paddingLeft:10,paddingRight:10, fontSize:20}, {transform: [{scale}]}]}>
         SET WATCHED
       </Animated.Text>
@@ -49,7 +49,7 @@ const leftActionWatched = (progress, dragX) => {
     extrapolate: 'clamp'
   })
   return (
-    <View style={{backgroundColor:"#458cff",justifyContent:"center",flex:1,marginBottom:10}}>
+    <View style={{backgroundColor:"#458cff",justifyContent:"center",flex:1,marginBottom:5}}>
       <Animated.Text style={[{color:'#fff', fontWeight:'bold', paddingLeft:10,paddingRight:10, fontSize:20}, {transform: [{scale}]}]}>
         SET UNWATCHED
       </Animated.Text>
@@ -75,8 +75,7 @@ const MovieList = (props) => {
 
   const handleEndScroll = () => {
     if(props.handleScrollEnd){
-      console.log("scrollend?: ",props.handleScrollEnd)
-      flatListRef.current.scrollToEnd()
+      //flatListRef.current.scrollToIndex({animated: true, index: 1})
       props.setScrollEndComplete()
     }
   }
@@ -124,35 +123,52 @@ const MovieList = (props) => {
       renderLeftActions={item.watchedState == 0 ? leftActionUnwatched : leftActionWatched}
       onSwipeableLeftOpen={item.watchedState == 0 ? () => handleSetWatched(item.title) : (() => handleSetUnwatched(item.title))}
       renderRightActions={(progress, dragX) => <RightActions progress={progress} dragX={dragX} onPress={() => onRightPress(item.title)}/>}
-    >
-      <Card 
-        containerStyle={[{margin:0,marginBottom:10,paddingBottom:15,paddingTop:0}, item.watchedState == 0 ? styles.unwatched : styles.watched]}
-      >
-        <TouchableOpacity onPress={() => setModalOn(item)} >
-          <Card.Title h2>
-            {item.title}
-          </Card.Title>
-        </TouchableOpacity>
-        <View style={{flexDirection: "row", paddingBottom:20,alignItems: 'center',justifyContent: 'center'}}>
-          <Image
-            source={require('../assets/rt.png')}
-            style={{ width: 40, height: 40, marginRight:10 }}
-          />
-          <Text h3 style={{color:"red"}}>
-            {item.rating}
-          </Text>
+    > 
+        <View style={styles.rowView}>
+          <View style={styles.titleAndDescriptionContainer}>
+            <TouchableOpacity onPress={() => setModalOn(item)}>
+              <Text numberOfLines={2} style={styles.titleText}>
+                {item.title}
+              </Text>
+              <Text numberOfLines={4} style={styles.descriptionText}>
+                {item.description}
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.verticalSeperator}>
+          </View>
+          <View style={styles.ratingContainer}>
+            <Image
+              source={
+                parseInt(item.rating) >= 0 && parseInt(item.rating) <= 60 ? 
+                  require('../assets/rt-rotten.png')
+                :
+                parseInt(item.rating) > 60 && parseInt(item.rating) <= 90 ?
+                  require('../assets/rt.png')
+                :
+                require('../assets/rt-certified-fresh.png')
+              }
+              style={styles.rtImage}
+            />
+            <Text h3 style={[
+              parseInt(item.rating) <= 60 ? 
+                {color:"#0ec654"} 
+              :
+              parseInt(item.rating) > 60 && parseInt(item.rating) <= 90 ? 
+                {color:"#f92e02"}
+              :
+                {color:"#ffd600"}
+              ]}>
+              {item.rating}
+            </Text>
+          </View>
         </View>
-        <Card.Divider/>
-        <Text>
-          {item.description}
-        </Text>
-      </Card>
     </Swipeable>
     </>
   );
 
   return(
-    <View style={{height:'85%',backgroundColor:"#bababa"}}>
+    <View style={styles.componentContainerView}>
         {props.allMoviesList.length == 0 ? 
             <NoMoviesFound/>
           :
@@ -163,6 +179,12 @@ const MovieList = (props) => {
               renderItem={renderItem}
               keyExtractor={item => item.title}
               contentContainerStyle={{ paddingBottom: 60}}
+              getItemLayout={(data, index) => (
+                {length: 150, offset: 155 * index, index}
+              )}
+              initialNumToRender={9}
+              extraData={props.allMoviesList}
+              initialScrollIndex={0}
             />
             <MovieInfoModal isVisible={isModalVisible} modalOff={setModalOff} movieObj={currentMovie} updateUserMovieRating={handleUserRating}/>         
           </>
@@ -172,13 +194,67 @@ const MovieList = (props) => {
 }
 
 const styles = StyleSheet.create({
-  watched : {
+  watched: {
     borderBottomColor:"green",
     borderWidth:2
   },
-  unwatched : {
+  unwatched: {
     borderBottomColor:"blue",
     borderWidth:2
+  },
+  componentContainerView:{
+    height:'86.85%',
+    maxHeight:'86.85%',
+    backgroundColor:"grey"
+  },
+  rowView: {
+    flex:1, 
+    flexDirection:'row',
+    height:150,
+    backgroundColor:'#383838',
+    marginBottom:5,
+  },
+  titleAndDescriptionContainer: {
+    flex:.8,
+    textAlign:'center',
+    justifyContent:'center',
+    marginRight:5
+  },
+  titleText: {
+    fontSize:30,
+    fontWeight:"bold",
+    marginLeft:10,
+    textAlign:'center',
+    marginBottom:10,
+    color:"white"
+  },
+  descriptionText: {
+    color:"#d4d4d4",
+    paddingBottom:5,
+    overflow:"hidden",
+    marginLeft:10,
+    marginBottom:5
+  },
+  verticalSeperator: {
+    width:1,
+    height:110,
+    borderColor:'white',
+    borderWidth:1,
+    justifyContent:'center',
+    marginTop:20,
+    marginBottom:20,
+    marginRight:5,
+    marginLeft:5
+  },
+  ratingContainer: {
+    flex:.2,
+    justifyContent:'center',
+    alignItems:'center'
+  },
+  rtImage: {
+    width: 40, 
+    height: 40,
+    marginBottom:10
   }
 });
 

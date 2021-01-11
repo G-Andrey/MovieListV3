@@ -35,7 +35,7 @@ const ButtonBar = (props) => {
   }, [props.currentFilteredState]);
 
   return (
-    <View style={{flexDirection:"row",height:50}}>
+    <View style={styles.componentContainerView}>
       <TouchableOpacity style={{flex:1}} onPress={() => handleClick(2)}>
         <View style={[styles.defaultView, unwatchedClicked ? styles.selectedView : null]}>
           <Text style={[styles.defaultText, unwatchedClicked ? styles.selectedText : null]}>
@@ -55,6 +55,10 @@ const ButtonBar = (props) => {
 };
 
 const styles = StyleSheet.create({
+  componentContainerView: {
+    flexDirection:"row",
+    height:50
+  },  
   defaultView: {
     backgroundColor:'grey',
     height:"100%",

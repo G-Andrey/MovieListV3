@@ -75,7 +75,7 @@ const MovieList = (props) => {
 
   const handleEndScroll = () => {
     if(props.handleScrollEnd){
-      flatListRef.current.scrollToIndex({animated: true, index: 0})
+      //flatListRef.current.scrollToIndex({animated: true, index: 1})
       props.setScrollEndComplete()
     }
   }
@@ -182,7 +182,9 @@ const MovieList = (props) => {
               getItemLayout={(data, index) => (
                 {length: 150, offset: 155 * index, index}
               )}
-              initialNumToRender={5}
+              initialNumToRender={9}
+              extraData={props.allMoviesList}
+              initialScrollIndex={0}
             />
             <MovieInfoModal isVisible={isModalVisible} modalOff={setModalOff} movieObj={currentMovie} updateUserMovieRating={handleUserRating}/>         
           </>
@@ -202,14 +204,15 @@ const styles = StyleSheet.create({
   },
   componentContainerView:{
     height:'86.85%',
-    backgroundColor:"#212121"
+    maxHeight:'86.85%',
+    backgroundColor:"grey"
   },
   rowView: {
     flex:1, 
     flexDirection:'row',
     height:150,
-    backgroundColor:'#616161',
-    marginBottom:5
+    backgroundColor:'#383838',
+    marginBottom:5,
   },
   titleAndDescriptionContainer: {
     flex:.8,

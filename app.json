@@ -22,7 +22,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "backgroundColor": "#5C9BBB"
       },
       "package": "com.Andrey.MovieAppV3",
       "versionCode": 1

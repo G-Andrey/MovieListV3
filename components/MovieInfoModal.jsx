@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Linking } from 'react-native';
 import { View, Text, Modal, TouchableOpacity, ScrollView, TouchableWithoutFeedback, Image, StyleSheet, TextInput } from 'react-native';
 import { Button } from 'react-native-elements';
@@ -12,6 +12,14 @@ const Seperator = () => {
 }
 
 const MovieInfoModal = (props) => {
+  const [currentTitle, setCurrentTitle] = useState('') //stores title of the current obj, used to refernce movie in the movielist array
+  const [newTitle, setNewTitle] = useState(''); //keeps track of the title if gets changed
+
+  useEffect( () => {
+    setNewTitle(props.movieObj.title);
+    setCurrentTitle(props.movieObj.title);
+  }, [props]);
+  
   return(
     <View >
       <Modal 
@@ -20,6 +28,8 @@ const MovieInfoModal = (props) => {
         transparent={true}
       >
         <View style={styles.fadedBackground}>
+          {console.log("new:",newTitle)}
+          {console.log("curr",currentTitle)}
           <TouchableOpacity style={{flex:1}} onPress={() => props.modalOff()} activeOpacity={1}>
             <TouchableWithoutFeedback onPress={() => {}} >
               <View style={styles.modalContainer}>
@@ -29,8 +39,9 @@ const MovieInfoModal = (props) => {
                   multiline={true}
                   returnKeyType={'done'}
                   blurOnSubmit={true}
+                  onChangeText={text => setNewTitle(text)}
                 >
-                  {props.movieObj.title}
+                  {newTitle}
                 </TextInput>
                 <Seperator/>
                 <ScrollView>

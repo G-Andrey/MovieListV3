@@ -1,6 +1,6 @@
 import React from 'react';
 import { Linking } from 'react-native';
-import { View, Text, Modal, TouchableOpacity, ScrollView, TouchableWithoutFeedback, Image, StyleSheet } from 'react-native';
+import { View, Text, Modal, TouchableOpacity, ScrollView, TouchableWithoutFeedback, Image, StyleSheet, TextInput } from 'react-native';
 import { Button } from 'react-native-elements';
 import { AirbnbRating } from './react-native-ratings/src'
 
@@ -23,9 +23,15 @@ const MovieInfoModal = (props) => {
           <TouchableOpacity style={{flex:1}} onPress={() => props.modalOff()} activeOpacity={1}>
             <TouchableWithoutFeedback onPress={() => {}} >
               <View style={styles.modalContainer}>
-                <Text style={styles.titleText}>
+                <TextInput 
+                  style={styles.titleText}
+                  editable={true}
+                  multiline={true}
+                  returnKeyType={'done'}
+                  blurOnSubmit={true}
+                >
                   {props.movieObj.title}
-                </Text>
+                </TextInput>
                 <Seperator/>
                 <ScrollView>
                   <View onStartShouldSetResponder={() => true}>
@@ -168,7 +174,8 @@ const styles = StyleSheet.create({
     textAlign:"center", 
     fontSize:30, 
     fontWeight:"bold",
-    marginVertical:5
+    marginVertical:5,
+    color:"black"
   },
   posterImgContainer: {
     flex:1,

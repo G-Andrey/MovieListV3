@@ -21,7 +21,12 @@ const MovieInfoModal = (props) => {
   }, [props]);
 
   onTextEnd = () => {
-    props.updateTitle(currentTitle,newTitle)
+    if (newTitle !== "") {
+      props.updateTitle(currentTitle,newTitle)
+    }
+    else{
+      setNewTitle(currentTitle)
+    }
   };
   
 
@@ -38,12 +43,13 @@ const MovieInfoModal = (props) => {
               <View style={styles.modalContainer}>
                 <TextInput 
                   style={styles.titleText}
-                  editable={true}
+                  editable={false}
                   multiline={true}
                   returnKeyType={'done'}
                   blurOnSubmit={true}
                   onChangeText={text => setNewTitle(text)}
                   onEndEditing={() => onTextEnd()}
+                  selectTextOnFocus
                 >
                   {newTitle}
                 </TextInput>

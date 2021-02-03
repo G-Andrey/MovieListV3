@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Linking } from 'react-native';
-import { View, Text, Modal, TouchableOpacity, ScrollView, TouchableWithoutFeedback, Image, StyleSheet, TextInput } from 'react-native';
+import { View, Text, Modal, TouchableOpacity, ScrollView, TouchableWithoutFeedback, Image, StyleSheet, TextInput, TouchableHighlight } from 'react-native';
 import { Button } from 'react-native-elements';
 import { AirbnbRating } from './react-native-ratings/src'
 
@@ -14,10 +14,13 @@ const Seperator = () => {
 const MovieInfoModal = (props) => {
   const [currentTitle, setCurrentTitle] = useState('') //stores title of the current obj, used to refernce movie in the movielist array
   const [newTitle, setNewTitle] = useState(''); //keeps track of the title if gets changed
+  const [editable, setEditable] = useState();
+  const titleText = useRef(null)
 
   useEffect( () => {
     setNewTitle(props.movieObj.title);
     setCurrentTitle(props.movieObj.title);
+    setEditable(false)
   }, [props]);
 
   onTextEnd = () => {
@@ -27,8 +30,13 @@ const MovieInfoModal = (props) => {
     else{
       setNewTitle(currentTitle)
     }
+    setEditable(false)
   };
   
+  handleTitleLongPress = () => {
+    setEditable(true);
+    titleText.current.focus();
+  };
 
   return(
     <View >
@@ -41,18 +49,21 @@ const MovieInfoModal = (props) => {
           <TouchableOpacity style={{flex:1}} onPress={() => props.modalOff()} activeOpacity={1}>
             <TouchableWithoutFeedback onPress={() => {}} >
               <View style={styles.modalContainer}>
-                <TextInput 
-                  style={styles.titleText}
-                  editable={false}
-                  multiline={true}
-                  returnKeyType={'done'}
-                  blurOnSubmit={true}
-                  onChangeText={text => setNewTitle(text)}
-                  onEndEditing={() => onTextEnd()}
-                  selectTextOnFocus
-                >
-                  {newTitle}
-                </TextInput>
+                <TouchableHighlight onLongPress={() => handleTitleLongPress()} underlayColor="#DDDDDD">
+                  <TextInput 
+                    style={styles.titleText}
+                    editable={editable}
+                    multiline={true}
+                    returnKeyType={'done'}
+                    blurOnSubmit={true}
+                    onChangeText={text => setNewTitle(text)}
+                    onEndEditing={() => onTextEnd()}
+                    ref={titleText}
+                    selectTextOnFocus
+                  >
+                    {newTitle}
+                  </TextInput>
+                </TouchableHighlight>
                 <Seperator/>
                 <ScrollView>
                   <View onStartShouldSetResponder={() => true}>

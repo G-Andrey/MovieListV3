@@ -59,7 +59,7 @@ const MovieSearchBar = (props) => {
 
       //Rotten tomatoes url is a "m": movie
       else if (rottenTomatoeURL.includes('https://www.rottentomatoes.com/m/')){
-        console.log(rottenTomatoeURL)
+        
         const responseRottenTomatoe = await fetch(rottenTomatoeURL,{
           headers: {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36'}
         });
@@ -68,12 +68,12 @@ const MovieSearchBar = (props) => {
         $1 = cheerio.load(htmlOfReponseRottenTomatoe)
         
         //Retreiving movie title
-        movieTitle = $1(".mop-ratings-wrap__title.mop-ratings-wrap__title--top").text().trim()
+        movieTitle = $1(".scoreboard__title").text().trim()
         //console.log("Fetched movie title:",movieTitle)
   
         //Retrieving movie rating
-        movieRating = $1("span.mop-ratings-wrap__percentage").first().text().replace(/\s/g,'')
-        //console.log("Fetched rating:" , $1("span.mop-ratings-wrap__percentage").first().text().replace(/\s/g,''))
+        movieRating = $1(".scoreboard").attr('tomatometerscore') + "%"
+        //console.log("Fetched rating:" , movieRating)
   
         //Retrieving movie desc
         movieDesc = $1("div#movieSynopsis").text().trim()

@@ -19,7 +19,12 @@ const MovieInfoModal = (props) => {
     setNewTitle(props.movieObj.title);
     setCurrentTitle(props.movieObj.title);
   }, [props]);
+
+  onTextEnd = () => {
+    props.updateTitle(currentTitle,newTitle)
+  };
   
+
   return(
     <View >
       <Modal 
@@ -28,8 +33,6 @@ const MovieInfoModal = (props) => {
         transparent={true}
       >
         <View style={styles.fadedBackground}>
-          {console.log("new:",newTitle)}
-          {console.log("curr",currentTitle)}
           <TouchableOpacity style={{flex:1}} onPress={() => props.modalOff()} activeOpacity={1}>
             <TouchableWithoutFeedback onPress={() => {}} >
               <View style={styles.modalContainer}>
@@ -40,6 +43,7 @@ const MovieInfoModal = (props) => {
                   returnKeyType={'done'}
                   blurOnSubmit={true}
                   onChangeText={text => setNewTitle(text)}
+                  onEndEditing={() => onTextEnd()}
                 >
                   {newTitle}
                 </TextInput>

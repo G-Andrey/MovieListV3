@@ -185,7 +185,7 @@ const MovieList = (props) => {
               extraData={props.allMoviesList}
               initialScrollIndex={0}
             />
-            <MovieInfoModal isVisible={isModalVisible} modalOff={setModalOff} movieObj={currentMovie} updateUserMovieRating={handleUserRating}/>         
+            <MovieInfoModal isVisible={isModalVisible} modalOff={setModalOff} movieObj={currentMovie} updateUserMovieRating={handleUserRating} updateTitle={props.setNewTitle}/>         
           </>
         }
     </View>

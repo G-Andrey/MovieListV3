@@ -85,6 +85,13 @@ const App = () => {
     setListOFMovies(data);
   };
 
+  const editTitle = (currTitle, newTitle) => {
+    var data = [...listOfMovies];
+    var index = data.findIndex(obj => obj.title === currTitle);
+    data[index].title = newTitle;
+    setListOFMovies(data);
+  };
+
   const setUserRatingOfMovie = (movieTitle, ratingValue) => {
     const newList = listOfMovies.map(mov => (mov.title === movieTitle ? {...mov, userRating: ratingValue} : mov))
     setListOFMovies(newList)
@@ -181,6 +188,7 @@ const App = () => {
             handleScrollEnd={triggerScrollToEnd}
             setScrollEndComplete={scrollToEndComplete}
             setNewUserRating={setUserRatingOfMovie}
+            setNewTitle={editTitle}
           />
         </View>
       </ToastProvider>

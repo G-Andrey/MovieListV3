@@ -185,7 +185,7 @@ const MovieList = (props) => {
               extraData={props.allMoviesList}
               initialScrollIndex={0}
             />
-            <MovieInfoModal isVisible={isModalVisible} modalOff={setModalOff} movieObj={currentMovie} updateUserMovieRating={handleUserRating}/>         
+            <MovieInfoModal isVisible={isModalVisible} modalOff={setModalOff} movieObj={currentMovie} updateUserMovieRating={handleUserRating} updateTitle={props.setNewTitle}/>         
           </>
         }
     </View>
@@ -224,15 +224,16 @@ const styles = StyleSheet.create({
     fontWeight:"bold",
     marginLeft:10,
     textAlign:'center',
-    marginBottom:10,
-    color:"white"
+    marginBottom:5,
+    color:"white",
+    paddingTop:5,
   },
   descriptionText: {
     color:"#d4d4d4",
     paddingBottom:5,
     overflow:"hidden",
     marginLeft:10,
-    marginBottom:5
+    marginBottom:10,
   },
   verticalSeperator: {
     width:1,

@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Linking } from 'react-native';
-import { View, Text, Modal, TouchableOpacity, ScrollView, TouchableWithoutFeedback, Image, StyleSheet } from 'react-native';
+import { View, Text, Modal, TouchableOpacity, ScrollView, TouchableWithoutFeedback, Image, StyleSheet, TextInput, TouchableHighlight } from 'react-native';
 import { Button } from 'react-native-elements';
 import { AirbnbRating } from './react-native-ratings/src'
 
@@ -12,6 +12,32 @@ const Seperator = () => {
 }
 
 const MovieInfoModal = (props) => {
+  const [currentTitle, setCurrentTitle] = useState('') //stores title of the current obj, used to refernce movie in the movielist array
+  const [newTitle, setNewTitle] = useState(''); //keeps track of the title if gets changed
+  const [editable, setEditable] = useState();
+  const titleText = useRef(null)
+
+  useEffect( () => {
+    setNewTitle(props.movieObj.title);
+    setCurrentTitle(props.movieObj.title);
+    setEditable(false)
+  }, [props]);
+
+  onTextEnd = () => {
+    if (newTitle !== "") {
+      props.updateTitle(currentTitle,newTitle)
+    }
+    else{
+      setNewTitle(currentTitle)
+    }
+    setEditable(false)
+  };
+  
+  handleTitleLongPress = () => {
+    setEditable(true);
+    titleText.current.focus();
+  };
+
   return(
     <View >
       <Modal 
@@ -23,9 +49,21 @@ const MovieInfoModal = (props) => {
           <TouchableOpacity style={{flex:1}} onPress={() => props.modalOff()} activeOpacity={1}>
             <TouchableWithoutFeedback onPress={() => {}} >
               <View style={styles.modalContainer}>
-                <Text style={styles.titleText}>
-                  {props.movieObj.title}
-                </Text>
+                <TouchableHighlight onLongPress={() => handleTitleLongPress()} underlayColor="#DDDDDD">
+                  <TextInput 
+                    style={styles.titleText}
+                    editable={editable}
+                    multiline={true}
+                    returnKeyType={'done'}
+                    blurOnSubmit={true}
+                    onChangeText={text => setNewTitle(text)}
+                    onEndEditing={() => onTextEnd()}
+                    ref={titleText}
+                    selectTextOnFocus
+                  >
+                    {newTitle}
+                  </TextInput>
+                </TouchableHighlight>
                 <Seperator/>
                 <ScrollView>
                   <View onStartShouldSetResponder={() => true}>
@@ -69,7 +107,7 @@ const MovieInfoModal = (props) => {
                           {props.movieObj.genre ? 
                             props.movieObj.genre
                             :
-                            "Could not find"
+                            "Could not retrieve genre"
                           }
                         </Text>
                         <Text style={styles.sectionLabel}>
@@ -104,7 +142,11 @@ const MovieInfoModal = (props) => {
                           DESCRIPTION
                         </Text>
                         <Text style={styles.descriptionText}>
-                          {props.movieObj.description}
+                          {props.movieObj.description ? 
+                            props.movieObj.description
+                            :
+                            "Could not retrieve description"
+                          }
                         </Text>
                         <Text style={styles.sectionLabel}>
                           CAST
@@ -120,7 +162,7 @@ const MovieInfoModal = (props) => {
                                 }
                             })
                             :
-                              "Cast Not Found"
+                              "Could not retrieve cast"
                           }
                         </Text>
                         <Text style={styles.sectionLabel}>
@@ -168,7 +210,8 @@ const styles = StyleSheet.create({
     textAlign:"center", 
     fontSize:30, 
     fontWeight:"bold",
-    marginVertical:5
+    marginVertical:5,
+    color:"black"
   },
   posterImgContainer: {
     flex:1,

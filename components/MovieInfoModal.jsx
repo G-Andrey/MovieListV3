@@ -107,7 +107,7 @@ const MovieInfoModal = (props) => {
                           {props.movieObj.genre ? 
                             props.movieObj.genre
                             :
-                            "Could not find"
+                            "Could not retrieve genre"
                           }
                         </Text>
                         <Text style={styles.sectionLabel}>
@@ -142,7 +142,11 @@ const MovieInfoModal = (props) => {
                           DESCRIPTION
                         </Text>
                         <Text style={styles.descriptionText}>
-                          {props.movieObj.description}
+                          {props.movieObj.description ? 
+                            props.movieObj.description
+                            :
+                            "Could not retrieve description"
+                          }
                         </Text>
                         <Text style={styles.sectionLabel}>
                           CAST
@@ -158,7 +162,7 @@ const MovieInfoModal = (props) => {
                                 }
                             })
                             :
-                              "Cast Not Found"
+                              "Could not retrieve cast"
                           }
                         </Text>
                         <Text style={styles.sectionLabel}>

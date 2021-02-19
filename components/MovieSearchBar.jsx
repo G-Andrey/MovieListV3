@@ -235,7 +235,7 @@ const MovieSearchBar = (props) => {
               watchedState: watchedState,  // 0 = unwatched, 1 = watched
               moviePosterUrl: moviePosterUrl,
               genre: movieGenre,
-              cast: movieCast,
+              cast: ["Could not retrieve cast"],
               rtUrl: rottenTomatoeURL,
               trailerUrl: youtubeTrailerUrl,
               userRating: 5,

@@ -14,7 +14,7 @@ const MovieSearchBar = (props) => {
   };
   
   const webScrapeMovieData = async(srchTxt) => {
-    // props.triggerLoading()
+    props.triggerLoading()
     var movieTitle = "";
     var movieRating = "";
     var movieDesc = "";
@@ -47,7 +47,7 @@ const MovieSearchBar = (props) => {
           message: `Could not find the right rotten tomatoes url for "${srchTxt}"`,
           intent: 'ERROR',
         })
-        // props.cancelMovieLoading()
+        props.cancelMovieLoading()
         return
       }
 
@@ -134,7 +134,7 @@ const MovieSearchBar = (props) => {
           message: `Could not find ${srchTxt}`,
           intent: 'ERROR',
         })
-        // props.cancelMovieLoading()
+        props.cancelMovieLoading()
       }
 
       else{
@@ -160,7 +160,7 @@ const MovieSearchBar = (props) => {
           toast({
             message: `${movieTitle} is already on the list`,
           });
-          // props.cancelMovieLoading()
+          props.cancelMovieLoading()
         }
       }
     }
@@ -171,7 +171,7 @@ const MovieSearchBar = (props) => {
         message: `Could not find "${srchTxt}"`,
         intent: 'ERROR',
       })
-      // props.cancelMovieLoading()
+      props.cancelMovieLoading()
     }
   }
 

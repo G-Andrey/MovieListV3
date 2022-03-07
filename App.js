@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, StatusBar } from 'react-native';
+import { View, StyleSheet, StatusBar, ActivityIndicator, Text} from 'react-native';
 import { ThemeProvider } from 'styled-components';
 import { ToastProvider } from 'react-native-styled-toast';
 import theme from './components/theme'
@@ -18,14 +18,15 @@ const MyStatusBar = ({backgroundColor, ...props}) => (
 const App = () => {
   const [listOfMovies, setListOFMovies] = useState([]); //Array to store all movie objects
   const [filteredState, setFilteredState] = useState(2);   //0 = All, 1 = watched, 2 = unwatched
+  const [isLoadingMovie, setIsLoadingMovie] = useState(false);
   
   const addMovieToList = (newMovieObj) => {
     const newList = [newMovieObj, ...listOfMovies]
     setListOFMovies(newList);
     // saveMovieList(newList);
-    // setFilteredState(2);
+    setFilteredState(2);
     // setTriggerScrollToEnd(true);
-    // setIsLoadingMovie(false)
+    setIsLoadingMovie(false)
   };
 
   const setWatchedFiltered = () =>{
@@ -36,6 +37,14 @@ const App = () => {
     setFilteredState(2)
   };
 
+  const triggerLoadingMovieIndicator = () => {
+    setIsLoadingMovie(true);
+  }
+
+  const cancelLoadingMovieIndicator = () => {
+    setIsLoadingMovie(false);
+  }
+
   return (
     <ThemeProvider theme={theme}>
       {console.log('MOVIELIST')}
@@ -43,12 +52,24 @@ const App = () => {
       <ToastProvider maxToasts={2} position="BOTTOM">
         <View>
           <MyStatusBar backgroundColor='grey'/>
-          <MovieSearchBar addMovie={addMovieToList} currentMovieList={listOfMovies} />
+          <MovieSearchBar addMovie={addMovieToList} currentMovieList={listOfMovies} triggerLoading={triggerLoadingMovieIndicator} cancelMovieLoading={cancelLoadingMovieIndicator}/>
           <ButtonBar 
             filterWatched={setWatchedFiltered} 
             filterUnwatched={setUnwatchedFiltered} 
             currentFilteredState={filteredState}
           />
+          <View style={styles.filteredTabSeperator}>
+          </View>
+          {isLoadingMovie ? 
+            <View style={styles.loadingTab}>
+              <ActivityIndicator size="large" color="#fff" animating={true} style={{marginRight:10}} />
+              <Text style={styles.loadingText}>
+                Searching for Movie
+              </Text>
+            </View>
+            : 
+            null
+          }
         </View>
       </ToastProvider>
     </ThemeProvider>

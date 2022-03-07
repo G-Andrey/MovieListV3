@@ -3,7 +3,9 @@ import { StyleSheet, View, Text, StatusBar } from 'react-native';
 import { ThemeProvider } from 'styled-components';
 import { ToastProvider } from 'react-native-styled-toast';
 import theme from './components/theme'
+
 import MovieSearchBar from './components/MovieSearchBar';
+import ButtonBar from './components/ButtonBar';
 
 const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : StatusBar.currentHeight - 1;
 
@@ -15,6 +17,7 @@ const MyStatusBar = ({backgroundColor, ...props}) => (
 
 const App = () => {
   const [listOfMovies, setListOFMovies] = useState([]); //Array to store all movie objects
+  const [filteredState, setFilteredState] = useState(2);   //0 = All, 1 = watched, 2 = unwatched
   
   const addMovieToList = (newMovieObj) => {
     const newList = [newMovieObj, ...listOfMovies]
@@ -25,6 +28,14 @@ const App = () => {
     // setIsLoadingMovie(false)
   };
 
+  const setWatchedFiltered = () =>{
+    setFilteredState(1)
+  };
+
+  const setUnwatchedFiltered = () =>{
+    setFilteredState(2)
+  };
+
   return (
     <ThemeProvider theme={theme}>
       {console.log('MOVIELIST')}
@@ -33,6 +44,11 @@ const App = () => {
         <View>
           <MyStatusBar backgroundColor='grey'/>
           <MovieSearchBar addMovie={addMovieToList} currentMovieList={listOfMovies} />
+          <ButtonBar 
+            filterWatched={setWatchedFiltered} 
+            filterUnwatched={setUnwatchedFiltered} 
+            currentFilteredState={filteredState}
+          />
         </View>
       </ToastProvider>
     </ThemeProvider>

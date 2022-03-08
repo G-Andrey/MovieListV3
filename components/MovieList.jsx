@@ -5,7 +5,6 @@ import Swipeable from 'react-native-gesture-handler/Swipeable';
 import IconDelete from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconEye from 'react-native-vector-icons/Ionicons';
 import { useToast } from 'react-native-styled-toast';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import NoMoviesFound from './NoMoviesFound';
 import MovieInfoModal from './MovieInfoModal';
@@ -123,7 +122,6 @@ const MovieList = (props) => {
 
     return (
       <>
-      <GestureHandlerRootView>
         <Swipeable
           renderLeftActions={item.watchedState == 0 ? leftActionUnwatched : leftActionWatched}
           onSwipeableLeftOpen={item.watchedState == 0 ? () => handleSetWatched(item.title) : (() => handleSetUnwatched(item.title))}
@@ -169,7 +167,6 @@ const MovieList = (props) => {
               </View>
             </View>
         </Swipeable>
-      </GestureHandlerRootView>
       </>
     );
   };

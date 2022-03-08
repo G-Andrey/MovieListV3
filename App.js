@@ -5,6 +5,7 @@ import { ToastProvider } from 'react-native-styled-toast';
 import theme from './components/theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import MovieSearchBar from './components/MovieSearchBar';
 import ButtonBar from './components/ButtonBar';
@@ -125,6 +126,7 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <ToastProvider maxToasts={2} position="BOTTOM">
+        <GestureHandlerRootView>
         <View>
           <Spinner
             visible={isLoading}
@@ -169,6 +171,7 @@ const App = () => {
             setNewTitle={editTitle}
           />
         </View>
+        </GestureHandlerRootView>
       </ToastProvider>
     </ThemeProvider>
   );

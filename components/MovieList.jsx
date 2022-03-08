@@ -5,6 +5,8 @@ import Swipeable from 'react-native-gesture-handler/Swipeable';
 import IconDelete from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconEye from 'react-native-vector-icons/Ionicons';
 import { useToast } from 'react-native-styled-toast';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
 import NoMoviesFound from './NoMoviesFound';
 import MovieInfoModal from './MovieInfoModal';
 
@@ -121,51 +123,53 @@ const MovieList = (props) => {
 
     return (
       <>
-      <Swipeable
-        renderLeftActions={item.watchedState == 0 ? leftActionUnwatched : leftActionWatched}
-        onSwipeableLeftOpen={item.watchedState == 0 ? () => handleSetWatched(item.title) : (() => handleSetUnwatched(item.title))}
-        renderRightActions={(progress, dragX) => <RightActions progress={progress} dragX={dragX} onPress={() => onRightPress(item.title)}/>}
-      > 
-          <View style={styles.rowView}>
-            <View style={styles.titleAndDescriptionContainer}>
-              <TouchableOpacity onPress={() => setModalOn(item)}>
-                <Text numberOfLines={2} style={styles.titleText}>
-                  {item.title}
-                </Text>
-                <Text numberOfLines={4} style={styles.descriptionText}>
-                  {item.description}
-                </Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.verticalSeperator}>
-            </View>
-            <View style={styles.ratingContainer}>
-              <Image
-                source={
-                  parseInt(item.rating) >= 0 && parseInt(item.rating) <= 60 ? 
-                    require('../assets/rt-rotten.png')
+      <GestureHandlerRootView>
+        <Swipeable
+          renderLeftActions={item.watchedState == 0 ? leftActionUnwatched : leftActionWatched}
+          onSwipeableLeftOpen={item.watchedState == 0 ? () => handleSetWatched(item.title) : (() => handleSetUnwatched(item.title))}
+          renderRightActions={(progress, dragX) => <RightActions progress={progress} dragX={dragX} onPress={() => onRightPress(item.title)}/>}
+        > 
+            <View style={styles.rowView}>
+              <View style={styles.titleAndDescriptionContainer}>
+                <TouchableOpacity onPress={() => setModalOn(item)}>
+                  <Text numberOfLines={2} style={styles.titleText}>
+                    {item.title}
+                  </Text>
+                  <Text numberOfLines={4} style={styles.descriptionText}>
+                    {item.description}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.verticalSeperator}>
+              </View>
+              <View style={styles.ratingContainer}>
+                <Image
+                  source={
+                    parseInt(item.rating) >= 0 && parseInt(item.rating) <= 60 ? 
+                      require('../assets/rt-rotten.png')
+                    :
+                    parseInt(item.rating) > 60 && parseInt(item.rating) <= 90 ?
+                      require('../assets/rt.png')
+                    :
+                    require('../assets/rt-certified-fresh.png')
+                  }
+                  style={styles.rtImage}
+                />
+                <Text h3 style={[
+                  parseInt(item.rating) <= 60 ? 
+                    {color:"#0ec654"} 
                   :
-                  parseInt(item.rating) > 60 && parseInt(item.rating) <= 90 ?
-                    require('../assets/rt.png')
+                  parseInt(item.rating) > 60 && parseInt(item.rating) <= 90 ? 
+                    {color:"#f92e02"}
                   :
-                  require('../assets/rt-certified-fresh.png')
-                }
-                style={styles.rtImage}
-              />
-              <Text h3 style={[
-                parseInt(item.rating) <= 60 ? 
-                  {color:"#0ec654"} 
-                :
-                parseInt(item.rating) > 60 && parseInt(item.rating) <= 90 ? 
-                  {color:"#f92e02"}
-                :
-                  {color:"#ffd600"}
-                ]}>
-                {item.rating}
-              </Text>
+                    {color:"#ffd600"}
+                  ]}>
+                  {item.rating}
+                </Text>
+              </View>
             </View>
-          </View>
-      </Swipeable>
+        </Swipeable>
+      </GestureHandlerRootView>
       </>
     );
   };

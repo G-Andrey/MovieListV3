@@ -35,7 +35,7 @@ const MovieInfoModal = (props) => {
   
   handleTitleLongPress = () => {
     setEditable(true);
-    titleText.current.focus();
+    setTimeout( () => titleText.current.focus(), 0)
   };
 
   return(
@@ -59,7 +59,7 @@ const MovieInfoModal = (props) => {
                     onChangeText={text => setNewTitle(text)}
                     onEndEditing={() => onTextEnd()}
                     ref={titleText}
-                    selectTextOnFocus
+                    // selectTextOnFocus
                   >
                     {newTitle}
                   </TextInput>

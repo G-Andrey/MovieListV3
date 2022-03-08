@@ -47,6 +47,7 @@ const App = () => {
     var index = data.findIndex(obj => obj.title === movieTitle);
     data[index].watchedState = 1;
     setListOFMovies(data);
+    saveMovieList(data);
   };
 
   const setAsUnWatched = (movieTitle) => {
@@ -66,7 +67,7 @@ const App = () => {
     var index = data.findIndex(obj => obj.title === currTitle);
     data[index].title = newTitle;
     setListOFMovies(data);
-    saveMovieList(newList);
+    saveMovieList(data);
   };
 
   const saveMovieList = async(updatedList) => {

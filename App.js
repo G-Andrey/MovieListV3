@@ -6,6 +6,7 @@ import theme from './components/theme'
 
 import MovieSearchBar from './components/MovieSearchBar';
 import ButtonBar from './components/ButtonBar';
+import MovieList from './components/MovieList';
 
 const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : StatusBar.currentHeight - 1;
 
@@ -19,14 +20,43 @@ const App = () => {
   const [listOfMovies, setListOFMovies] = useState([]); //Array to store all movie objects
   const [filteredState, setFilteredState] = useState(2);   //0 = All, 1 = watched, 2 = unwatched
   const [isLoadingMovie, setIsLoadingMovie] = useState(false);
+  const [triggerScrollToEnd, setTriggerScrollToEnd] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   
   const addMovieToList = (newMovieObj) => {
     const newList = [newMovieObj, ...listOfMovies]
     setListOFMovies(newList);
     // saveMovieList(newList);
     setFilteredState(2);
-    // setTriggerScrollToEnd(true);
+    setTriggerScrollToEnd(true);
     setIsLoadingMovie(false)
+  };
+
+  const deleteMovieByTitle = (movieTitle) => {
+    var newList = listOfMovies.filter( mov => {
+      return mov.title !== movieTitle;
+    })
+    setListOFMovies(newList);
+    // saveMovieList(newList);
+  };
+
+  const setAsWatched = (movieTitle) => {
+    var data = [...listOfMovies];
+    var index = data.findIndex(obj => obj.title === movieTitle);
+    data[index].watchedState = 1;
+    setListOFMovies(data);
+  };
+
+  const setAsUnWatched = (movieTitle) => {
+    const newList = listOfMovies.map(mov => (mov.title === movieTitle ? {...mov, watchedState: 0} : mov))
+    setListOFMovies(newList)
+    // saveMovieList(newList);
+  };
+
+  const setUserRatingOfMovie = (movieTitle, ratingValue) => {
+    const newList = listOfMovies.map(mov => (mov.title === movieTitle ? {...mov, userRating: ratingValue} : mov))
+    setListOFMovies(newList)
+    // saveMovieList(newList);
   };
 
   const setWatchedFiltered = () =>{
@@ -39,11 +69,22 @@ const App = () => {
 
   const triggerLoadingMovieIndicator = () => {
     setIsLoadingMovie(true);
-  }
+  };
 
   const cancelLoadingMovieIndicator = () => {
     setIsLoadingMovie(false);
-  }
+  };
+
+  const scrollToEndComplete = () => {
+    setTriggerScrollToEnd(false);
+  };
+
+  const editTitle = (currTitle, newTitle) => {
+    var data = [...listOfMovies];
+    var index = data.findIndex(obj => obj.title === currTitle);
+    data[index].title = newTitle;
+    setListOFMovies(data);
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -70,6 +111,23 @@ const App = () => {
             : 
             null
           }
+          <MovieList 
+            allMoviesList={
+              filteredState == 1 ?
+                listOfMovies.filter(mov => (mov.watchedState == 1))  
+              :
+              filteredState == 2 ?
+                listOfMovies.filter(mov => (mov.watchedState == 0))
+              : null      
+            }   
+            deleteMovie={deleteMovieByTitle}
+            setWatched={setAsWatched}
+            setUnwatched={setAsUnWatched}
+            handleScrollEnd={triggerScrollToEnd}
+            setScrollEndComplete={scrollToEndComplete}
+            setNewUserRating={setUserRatingOfMovie}
+            setNewTitle={editTitle}
+          />
         </View>
       </ToastProvider>
     </ThemeProvider>

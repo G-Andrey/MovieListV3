@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, StatusBar, ActivityIndicator, Text} from 'react-native';
 import { ThemeProvider } from 'styled-components';
 import { ToastProvider } from 'react-native-styled-toast';
-import theme from './components/theme'
+import theme from './components/theme';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import MovieSearchBar from './components/MovieSearchBar';
 import ButtonBar from './components/ButtonBar';
@@ -21,12 +23,12 @@ const App = () => {
   const [filteredState, setFilteredState] = useState(2);   //0 = All, 1 = watched, 2 = unwatched
   const [isLoadingMovie, setIsLoadingMovie] = useState(false);
   const [triggerScrollToEnd, setTriggerScrollToEnd] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState();
   
   const addMovieToList = (newMovieObj) => {
     const newList = [newMovieObj, ...listOfMovies]
     setListOFMovies(newList);
-    // saveMovieList(newList);
+    saveMovieList(newList);
     setFilteredState(2);
     setTriggerScrollToEnd(true);
     setIsLoadingMovie(false)
@@ -37,7 +39,7 @@ const App = () => {
       return mov.title !== movieTitle;
     })
     setListOFMovies(newList);
-    // saveMovieList(newList);
+    saveMovieList(newList);
   };
 
   const setAsWatched = (movieTitle) => {
@@ -50,20 +52,56 @@ const App = () => {
   const setAsUnWatched = (movieTitle) => {
     const newList = listOfMovies.map(mov => (mov.title === movieTitle ? {...mov, watchedState: 0} : mov))
     setListOFMovies(newList)
-    // saveMovieList(newList);
+    saveMovieList(newList);
   };
 
   const setUserRatingOfMovie = (movieTitle, ratingValue) => {
     const newList = listOfMovies.map(mov => (mov.title === movieTitle ? {...mov, userRating: ratingValue} : mov))
     setListOFMovies(newList)
-    // saveMovieList(newList);
+    saveMovieList(newList);
   };
 
-  const setWatchedFiltered = () =>{
+  const editTitle = (currTitle, newTitle) => {
+    var data = [...listOfMovies];
+    var index = data.findIndex(obj => obj.title === currTitle);
+    data[index].title = newTitle;
+    setListOFMovies(data);
+    saveMovieList(newList);
+  };
+
+  const saveMovieList = async(updatedList) => {
+    try{
+      const json = JSON.stringify(updatedList)
+      await AsyncStorage.setItem('@movie_list',json)
+    }
+    catch(e){
+      console.log("saving failed")
+    }
+  };
+
+  const loadMovieList = async() =>{
+    setIsLoading(true)
+    try{
+      const res = await AsyncStorage.getItem('@movie_list')
+      if (res != null){
+        setListOFMovies(JSON.parse(res))
+        setIsLoading(false)
+      }
+      else{
+        console.log("loading failed")
+        setIsLoading(false)
+      }
+    }
+    catch(e){
+      console.log(e)
+    }
+  };
+
+  const setWatchedFiltered = () => {
     setFilteredState(1)
   };
 
-  const setUnwatchedFiltered = () =>{
+  const setUnwatchedFiltered = () => {
     setFilteredState(2)
   };
 
@@ -79,19 +117,20 @@ const App = () => {
     setTriggerScrollToEnd(false);
   };
 
-  const editTitle = (currTitle, newTitle) => {
-    var data = [...listOfMovies];
-    var index = data.findIndex(obj => obj.title === currTitle);
-    data[index].title = newTitle;
-    setListOFMovies(data);
-  };
+  useEffect( () => {
+    loadMovieList();
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
-      {console.log('MOVIELIST')}
-      {console.log(listOfMovies)}
       <ToastProvider maxToasts={2} position="BOTTOM">
         <View>
+          <Spinner
+            visible={isLoading}
+            textContent={'Loading Saved Movies'}
+            textStyle={{color: '#FFF', fontSize:35, fontWeight:'bold'}}
+            overlayColor="rgba(0, 0, 0, 0.75)"
+          />
           <MyStatusBar backgroundColor='grey'/>
           <MovieSearchBar addMovie={addMovieToList} currentMovieList={listOfMovies} triggerLoading={triggerLoadingMovieIndicator} cancelMovieLoading={cancelLoadingMovieIndicator}/>
           <ButtonBar 
@@ -132,7 +171,6 @@ const App = () => {
       </ToastProvider>
     </ThemeProvider>
   );
-
 }
 
 export default App;

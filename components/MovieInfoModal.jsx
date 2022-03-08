@@ -35,7 +35,7 @@ const MovieInfoModal = (props) => {
   
   handleTitleLongPress = () => {
     setEditable(true);
-    titleText.current.focus();
+    setTimeout( () => titleText.current.focus(), 0)
   };
 
   return(
@@ -59,7 +59,7 @@ const MovieInfoModal = (props) => {
                     onChangeText={text => setNewTitle(text)}
                     onEndEditing={() => onTextEnd()}
                     ref={titleText}
-                    selectTextOnFocus
+                    // selectTextOnFocus
                   >
                     {newTitle}
                   </TextInput>
@@ -169,10 +169,10 @@ const MovieInfoModal = (props) => {
                           RATE MOVIE
                         </Text>
                         <AirbnbRating
-                          reviews={["Terrible", "Bad", "Not Good", "Meh", "Average", "Very Good", "Wow", "Amazing", "Unbelievable", "The Best"]}
+                          reviews={["Terrible", "Bad", "Not Good", "Meh", "Average", "Very Good", "Amazing", "Unbelievable", "The Best"]}
                           defaultRating={props.movieObj.userRating}
                           ratingBackgroundColor='grey'
-                          count={10}
+                          count={9}
                           size={30}
                           onFinishRating={rating => props.updateUserMovieRating(rating)}
                           starContainerStyle={{marginBottom:10}}

@@ -1,38 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, StatusBar, ActivityIndicator, Text} from 'react-native';
+import { ThemeProvider } from 'styled-components';
+import { ToastProvider } from 'react-native-styled-toast';
+import theme from './components/theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Spinner from 'react-native-loading-spinner-overlay';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
 import MovieSearchBar from './components/MovieSearchBar';
 import ButtonBar from './components/ButtonBar';
 import MovieList from './components/MovieList';
-import Spinner from 'react-native-loading-spinner-overlay';
-import { ToastProvider } from 'react-native-styled-toast';
-import { ThemeProvider } from 'styled-components';
-import theme from './components/theme'
 
 const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : StatusBar.currentHeight - 1;
-
-const styles = StyleSheet.create({
-  statusBar: {
-    height: STATUSBAR_HEIGHT,
-  },
-  loadingTab: {
-    flexDirection:'row',
-    backgroundColor:'grey',
-    paddingTop:5,
-    paddingBottom:5,
-    justifyContent:"center",
-    alignItems:"center"
-  },
-  loadingText: {
-    color:"#fff",
-    fontWeight:"bold",
-    fontSize:15
-  },
-  filteredTabSeperator: {
-    borderBottomColor: 'grey',
-    borderBottomWidth: 2
-  }
-});
 
 const MyStatusBar = ({backgroundColor, ...props}) => (
   <View style={[styles.statusBar, { backgroundColor }]}>
@@ -41,23 +20,12 @@ const MyStatusBar = ({backgroundColor, ...props}) => (
 );
 
 const App = () => {
-  const [listOfMovies, setListOFMovies] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [listOfMovies, setListOFMovies] = useState([]); //Array to store all movie objects
   const [filteredState, setFilteredState] = useState(2);   //0 = All, 1 = watched, 2 = unwatched
-  const [triggerScrollToEnd, setTriggerScrollToEnd] = useState(false);
   const [isLoadingMovie, setIsLoadingMovie] = useState(false);
-
-  const scrollToEndComplete = () => {
-    setTriggerScrollToEnd(false);
-  }
-
-  const triggerLoadingMovieIndicator = () => {
-    setIsLoadingMovie(true);
-  }
-
-  const cancelLoadingMovieIndicator = () => {
-    setIsLoadingMovie(false);
-  }
+  const [triggerScrollToEnd, setTriggerScrollToEnd] = useState(false);
+  const [isLoading, setIsLoading] = useState();
+  
   const addMovieToList = (newMovieObj) => {
     const newList = [newMovieObj, ...listOfMovies]
     setListOFMovies(newList);
@@ -67,22 +35,32 @@ const App = () => {
     setIsLoadingMovie(false)
   };
 
-  const setWatchedFiltered = () =>{
-    setFilteredState(1)
-  };
-
-  const setUnwatchedFiltered = () =>{
-    setFilteredState(2)
+  const deleteMovieByTitle = (movieTitle) => {
+    var newList = listOfMovies.filter( mov => {
+      return mov.title !== movieTitle;
+    })
+    setListOFMovies(newList);
+    saveMovieList(newList);
   };
 
   const setAsWatched = (movieTitle) => {
-    // const newList = listOfMovies.map(mov => (mov.title === movieTitle ? {...mov, watchedState: 1} : mov))
-    // setListOFMovies(newList)
-    // saveMovieList(newList);
     var data = [...listOfMovies];
     var index = data.findIndex(obj => obj.title === movieTitle);
     data[index].watchedState = 1;
     setListOFMovies(data);
+    saveMovieList(data);
+  };
+
+  const setAsUnWatched = (movieTitle) => {
+    const newList = listOfMovies.map(mov => (mov.title === movieTitle ? {...mov, watchedState: 0} : mov))
+    setListOFMovies(newList)
+    saveMovieList(newList);
+  };
+
+  const setUserRatingOfMovie = (movieTitle, ratingValue) => {
+    const newList = listOfMovies.map(mov => (mov.title === movieTitle ? {...mov, userRating: ratingValue} : mov))
+    setListOFMovies(newList)
+    saveMovieList(newList);
   };
 
   const editTitle = (currTitle, newTitle) => {
@@ -90,18 +68,7 @@ const App = () => {
     var index = data.findIndex(obj => obj.title === currTitle);
     data[index].title = newTitle;
     setListOFMovies(data);
-  };
-
-  const setUserRatingOfMovie = (movieTitle, ratingValue) => {
-    const newList = listOfMovies.map(mov => (mov.title === movieTitle ? {...mov, userRating: ratingValue} : mov))
-    setListOFMovies(newList)
-    saveMovieList(newList);
-  }
-
-  const setAsUnWatched = (movieTitle) => {
-    const newList = listOfMovies.map(mov => (mov.title === movieTitle ? {...mov, watchedState: 0} : mov))
-    setListOFMovies(newList)
-    saveMovieList(newList);
+    saveMovieList(data);
   };
 
   const saveMovieList = async(updatedList) => {
@@ -115,6 +82,7 @@ const App = () => {
   };
 
   const loadMovieList = async() =>{
+    setIsLoading(true)
     try{
       const res = await AsyncStorage.getItem('@movie_list')
       if (res != null){
@@ -131,22 +99,34 @@ const App = () => {
     }
   };
 
-  useEffect( () =>{
+  const setWatchedFiltered = () => {
+    setFilteredState(1)
+  };
+
+  const setUnwatchedFiltered = () => {
+    setFilteredState(2)
+  };
+
+  const triggerLoadingMovieIndicator = () => {
+    setIsLoadingMovie(true);
+  };
+
+  const cancelLoadingMovieIndicator = () => {
+    setIsLoadingMovie(false);
+  };
+
+  const scrollToEndComplete = () => {
+    setTriggerScrollToEnd(false);
+  };
+
+  useEffect( () => {
     loadMovieList();
   }, []);
 
-  const deleteMovieByTitle = (movieTitle) => {
-    var newList = listOfMovies.filter( mov => {
-      return mov.title !== movieTitle;
-    })
-    setListOFMovies(newList);
-    saveMovieList(newList);
-  };
-
   return (
-    <>
     <ThemeProvider theme={theme}>
       <ToastProvider maxToasts={2} position="BOTTOM">
+        <GestureHandlerRootView>
         <View>
           <Spinner
             visible={isLoading}
@@ -191,10 +171,33 @@ const App = () => {
             setNewTitle={editTitle}
           />
         </View>
+        </GestureHandlerRootView>
       </ToastProvider>
-    </ThemeProvider>     
-    </>  
+    </ThemeProvider>
   );
-};
+}
 
 export default App;
+
+const styles = StyleSheet.create({
+  statusBar: {
+    height: STATUSBAR_HEIGHT,
+  },
+  loadingTab: {
+    flexDirection:'row',
+    backgroundColor:'grey',
+    paddingTop:5,
+    paddingBottom:5,
+    justifyContent:"center",
+    alignItems:"center"
+  },
+  loadingText: {
+    color:"#fff",
+    fontWeight:"bold",
+    fontSize:15
+  },
+  filteredTabSeperator: {
+    borderBottomColor: 'grey',
+    borderBottomWidth: 2
+  }
+});

@@ -5,58 +5,9 @@ import Swipeable from 'react-native-gesture-handler/Swipeable';
 import IconDelete from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconEye from 'react-native-vector-icons/Ionicons';
 import { useToast } from 'react-native-styled-toast';
+
 import NoMoviesFound from './NoMoviesFound';
 import MovieInfoModal from './MovieInfoModal';
-
-const RightActions = ({progress, dragX, onPress}) => {
-  const scale = dragX.interpolate({
-    inputRange: [-100,0],
-    outputRange: [1,0],
-    extrapolate: 'clamp'
-  })
-  return (
-    <TouchableOpacity onPress={onPress} style={{marginBottom:5}}>
-      <View style={{backgroundColor:'#ff0000', justifyContent:'center', textAlign:"center",alignItems:'flex-end',height:'100%'}}>
-        <Animated.Text style={[{color:'#fff', fontWeight:'bold', paddingLeft:20,paddingRight:20, fontSize:20}, {transform: [{scale}]}]}>
-          DELETE
-        </Animated.Text>
-        <IconDelete name="delete" size={50} style={[{color:'#fff',marginRight:30}]}/>
-      </View>
-    </TouchableOpacity>
-  )
-}
-
-const leftActionUnwatched = (progress, dragX) => {
-  const scale = dragX.interpolate({
-    inputRange: [0,100],
-    outputRange: [0,1],
-    extrapolate: 'clamp'
-  })
-  return (
-    <View style={{backgroundColor:"green",justifyContent:"center",flex:1,marginBottom:5}}>
-      <Animated.Text style={[{color:'#fff', fontWeight:'bold', paddingLeft:10,paddingRight:10, fontSize:20}, {transform: [{scale}]}]}>
-        SET WATCHED
-      </Animated.Text>
-      <IconEye name="eye" size={50} style={[{color:'#fff',marginLeft:50}]}/>
-    </View>
-  )
-}
-
-const leftActionWatched = (progress, dragX) => {
-  const scale = dragX.interpolate({
-    inputRange: [0,100],
-    outputRange: [0,1],
-    extrapolate: 'clamp'
-  })
-  return (
-    <View style={{backgroundColor:"#458cff",justifyContent:"center",flex:1,marginBottom:5}}>
-      <Animated.Text style={[{color:'#fff', fontWeight:'bold', paddingLeft:10,paddingRight:10, fontSize:20}, {transform: [{scale}]}]}>
-        SET UNWATCHED
-      </Animated.Text>
-      <IconEye name="eye-off" size={50} style={[{color:'#fff',marginLeft:60}]}/>
-    </View>
-  )
-}
 
 const MovieList = (props) => { 
   const flatListRef = useRef()
@@ -67,18 +18,18 @@ const MovieList = (props) => {
   const setModalOn = (item) => {
     setModalVisible(true);
     setCurrentMovie(item);
-  }
+  };
 
   const setModalOff = () => {
     setModalVisible(false);
-  }
+  };
 
   const handleEndScroll = () => {
     if(props.handleScrollEnd){
       flatListRef.current.scrollToIndex({animated: false, index: 0})
       props.setScrollEndComplete()
     }
-  }
+  };
 
   useEffect( () =>{
     handleEndScroll();
@@ -90,7 +41,7 @@ const MovieList = (props) => {
       message: `${movieTitle} deleted`,
       intent: 'ERROR',
     })
-  }
+  };
 
   const handleSetWatched = (movieTitle) => {
     props.setWatched(movieTitle)
@@ -100,7 +51,7 @@ const MovieList = (props) => {
       iconFamily: 'Ionicons',
       iconName: 'eye',
     })
-  }
+  };
 
   const handleSetUnwatched = (movieTitle) => {
     props.setUnwatched(movieTitle)
@@ -111,61 +62,114 @@ const MovieList = (props) => {
       iconName: 'eye-off',
       accentColor: '#458cff',
     })
-  }
+  };
 
   const handleUserRating = (rating) => {
     props.setNewUserRating(currentMovie.title, rating)
-  }
+  };
 
-  const renderItem = ({ item, index }) => (
-    <>
-    <Swipeable
-      renderLeftActions={item.watchedState == 0 ? leftActionUnwatched : leftActionWatched}
-      onSwipeableLeftOpen={item.watchedState == 0 ? () => handleSetWatched(item.title) : (() => handleSetUnwatched(item.title))}
-      renderRightActions={(progress, dragX) => <RightActions progress={progress} dragX={dragX} onPress={() => onRightPress(item.title)}/>}
-    > 
-        <View style={styles.rowView}>
-          <View style={styles.titleAndDescriptionContainer}>
-            <TouchableOpacity onPress={() => setModalOn(item)}>
-              <Text numberOfLines={2} style={styles.titleText}>
-                {item.title}
-              </Text>
-              <Text numberOfLines={4} style={styles.descriptionText}>
-                {item.description}
-              </Text>
-            </TouchableOpacity>
+  const renderItem = ({ item,index }) => {
+    
+    const RightActions = ({progress, dragX, onPress}) => {
+      const scale = dragX.interpolate({
+        inputRange: [-100,0],
+        outputRange: [1,0],
+        extrapolate: 'clamp'
+      })
+      return (
+        <TouchableOpacity onPress={onPress} style={{marginBottom:5}}>
+          <View style={{backgroundColor:'#ff0000', justifyContent:'center', textAlign:"center",alignItems:'flex-end',height:'100%'}}>
+            <Animated.Text style={[{color:'#fff', fontWeight:'bold', paddingLeft:20,paddingRight:20, fontSize:20}, {transform: [{scale}]}]}>
+              DELETE
+            </Animated.Text>
+            <IconDelete name="delete" size={50} style={[{color:'#fff',marginRight:30}]}/>
           </View>
-          <View style={styles.verticalSeperator}>
-          </View>
-          <View style={styles.ratingContainer}>
-            <Image
-              source={
-                parseInt(item.rating) >= 0 && parseInt(item.rating) <= 60 ? 
-                  require('../assets/rt-rotten.png')
-                :
-                parseInt(item.rating) > 60 && parseInt(item.rating) <= 90 ?
-                  require('../assets/rt.png')
-                :
-                require('../assets/rt-certified-fresh.png')
-              }
-              style={styles.rtImage}
-            />
-            <Text h3 style={[
-              parseInt(item.rating) <= 60 ? 
-                {color:"#0ec654"} 
-              :
-              parseInt(item.rating) > 60 && parseInt(item.rating) <= 90 ? 
-                {color:"#f92e02"}
-              :
-                {color:"#ffd600"}
-              ]}>
-              {item.rating}
-            </Text>
-          </View>
+        </TouchableOpacity>
+      )
+    }
+    
+    const leftActionUnwatched = (progress, dragX) => {
+      const scale = dragX.interpolate({
+        inputRange: [0,100],
+        outputRange: [0,1],
+        extrapolate: 'clamp'
+      })
+      return (
+        <View style={{backgroundColor:"green",justifyContent:"center",flex:1,marginBottom:5}}>
+          <Animated.Text style={[{color:'#fff', fontWeight:'bold', paddingLeft:10,paddingRight:10, fontSize:20}, {transform: [{scale}]}]}>
+            SET WATCHED
+          </Animated.Text>
+          <IconEye name="eye" size={50} style={[{color:'#fff',marginLeft:50}]}/>
         </View>
-    </Swipeable>
-    </>
-  );
+      )
+    };
+    
+    const leftActionWatched = (progress, dragX) => {
+      const scale = dragX.interpolate({
+        inputRange: [0,100],
+        outputRange: [0,1],
+        extrapolate: 'clamp'
+      })
+      return (
+        <View style={{backgroundColor:"#458cff",justifyContent:"center",flex:1,marginBottom:5}}>
+          <Animated.Text style={[{color:'#fff', fontWeight:'bold', paddingLeft:10,paddingRight:10, fontSize:20}, {transform: [{scale}]}]}>
+            SET UNWATCHED
+          </Animated.Text>
+          <IconEye name="eye-off" size={50} style={[{color:'#fff',marginLeft:60}]}/>
+        </View>
+      )
+    };
+
+    return (
+      <>
+        <Swipeable
+          renderLeftActions={item.watchedState == 0 ? leftActionUnwatched : leftActionWatched}
+          onSwipeableLeftOpen={item.watchedState == 0 ? () => handleSetWatched(item.title) : (() => handleSetUnwatched(item.title))}
+          renderRightActions={(progress, dragX) => <RightActions progress={progress} dragX={dragX} onPress={() => onRightPress(item.title)}/>}
+        > 
+            <View style={styles.rowView}>
+              <View style={styles.titleAndDescriptionContainer}>
+                <TouchableOpacity onPress={() => setModalOn(item)}>
+                  <Text numberOfLines={2} style={styles.titleText}>
+                    {item.title}
+                  </Text>
+                  <Text numberOfLines={4} style={styles.descriptionText}>
+                    {item.description}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.verticalSeperator}>
+              </View>
+              <View style={styles.ratingContainer}>
+                <Image
+                  source={
+                    parseInt(item.rating) >= 0 && parseInt(item.rating) <= 60 ? 
+                      require('../assets/rt-rotten.png')
+                    :
+                    parseInt(item.rating) > 60 && parseInt(item.rating) <= 90 ?
+                      require('../assets/rt.png')
+                    :
+                    require('../assets/rt-certified-fresh.png')
+                  }
+                  style={styles.rtImage}
+                />
+                <Text h3 style={[
+                  parseInt(item.rating) <= 60 ? 
+                    {color:"#0ec654"} 
+                  :
+                  parseInt(item.rating) > 60 && parseInt(item.rating) <= 90 ? 
+                    {color:"#f92e02"}
+                  :
+                    {color:"#ffd600"}
+                  ]}>
+                  {item.rating}
+                </Text>
+              </View>
+            </View>
+        </Swipeable>
+      </>
+    );
+  };
 
   return(
     <View style={styles.componentContainerView}>

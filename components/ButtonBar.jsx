@@ -2,11 +2,11 @@ import React, { useState,useEffect } from 'react';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 
 const ButtonBar = (props) => {
-  const [allClicked,setAllClicked] = useState(false)
+	const [allClicked,setAllClicked] = useState(false)
   const [watchClicked,setWatchClicked] = useState(false)
   const [unwatchedClicked,setUnwatchedClicked] = useState(true)
 
-  //0 = All, 1 = watched, 2 = unwatched
+	//0 = All, 1 = watched, 2 = unwatched
   const handleClick = (whichButton) => {
     if (whichButton == 0) {
       props.filterAll()
@@ -28,7 +28,7 @@ const ButtonBar = (props) => {
     }
   };
 
-  useEffect( () =>{
+  useEffect( () => {
     if(props.currentFilteredState == 2){
       handleClick(2)
     }
@@ -55,34 +55,34 @@ const ButtonBar = (props) => {
 };
 
 const styles = StyleSheet.create({
-  componentContainerView: {
-    flexDirection:"row",
-    height:50
-  },  
-  defaultView: {
-    backgroundColor:'grey',
-    height:"100%",
-    flex:1, 
-    justifyContent:'center', 
-    textAlign:"center",
-    borderLeftColor:"grey",
-    borderRightColor:"grey", 
-    borderTopColor:"grey",
-    borderWidth:3,
-    borderBottomColor:"grey"
-  },
-  defaultText: {
-    textAlign:'center',
-    fontSize:20, 
-    fontWeight:"bold",
-    color:'#c9c9c9'
-  },
-  selectedText: {
-    color:"#FFF"
-  },
-  selectedView: {
-    borderBottomColor:"#FFF"
-  }
-});
-
-export default ButtonBar;
+    componentContainerView: {
+      flexDirection:"row",
+      height:50
+    },  
+    defaultView: {
+      backgroundColor:'grey',
+      height:"100%",
+      flex:1, 
+      justifyContent:'center', 
+      textAlign:"center",
+      borderLeftColor:"grey",
+      borderRightColor:"grey", 
+      borderTopColor:"grey",
+      borderWidth:3,
+      borderBottomColor:"grey"
+    },
+    defaultText: {
+      textAlign:'center',
+      fontSize:20, 
+      fontWeight:"bold",
+      color:'#c9c9c9'
+    },
+    selectedText: {
+      color:"#FFF"
+    },
+    selectedView: {
+      borderBottomColor:"#FFF"
+    }
+  });
+  
+  export default ButtonBar;

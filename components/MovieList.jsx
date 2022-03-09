@@ -5,6 +5,7 @@ import Swipeable from 'react-native-gesture-handler/Swipeable';
 import IconDelete from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconEye from 'react-native-vector-icons/Ionicons';
 import { useToast } from 'react-native-styled-toast';
+import DraggableFlatList, {useOnCellActiveAnimation} from 'react-native-draggable-flatlist'
 
 import NoMoviesFound from './NoMoviesFound';
 import MovieInfoModal from './MovieInfoModal';
@@ -14,6 +15,7 @@ const MovieList = (props) => {
   const { toast } = useToast()
   const [isModalVisible, setModalVisible] = useState(false);
   const [currentMovie, setCurrentMovie] = useState({});
+  const [myData, setMyData] = useState();
 
   const setModalOn = (item) => {
     setModalVisible(true);
@@ -33,7 +35,8 @@ const MovieList = (props) => {
 
   useEffect( () =>{
     handleEndScroll();
-  }, [props.handleScrollEnd]);
+    setMyData(props.allMoviesList);
+  }, [props.handleScrollEnd, props.allMoviesList]);
 
   const onRightPress = (movieTitle) => {
     props.deleteMovie(movieTitle)
@@ -68,8 +71,9 @@ const MovieList = (props) => {
     props.setNewUserRating(currentMovie.title, rating)
   };
 
-  const renderItem = ({ item,index }) => {
-    
+  const renderItem = ({ item,drag }) => {
+    const { isActive } = useOnCellActiveAnimation();
+
     const RightActions = ({progress, dragX, onPress}) => {
       const scale = dragX.interpolate({
         inputRange: [-100,0],
@@ -126,10 +130,10 @@ const MovieList = (props) => {
           renderLeftActions={item.watchedState == 0 ? leftActionUnwatched : leftActionWatched}
           onSwipeableLeftOpen={item.watchedState == 0 ? () => handleSetWatched(item.title) : (() => handleSetUnwatched(item.title))}
           renderRightActions={(progress, dragX) => <RightActions progress={progress} dragX={dragX} onPress={() => onRightPress(item.title)}/>}
-        > 
-            <View style={styles.rowView}>
+        >   
+            <View style={[styles.rowView, {backgroundColor: isActive ? '#2e2e2e' : '#383838', borderColor: isActive ? 'white' : null, borderWidth: isActive ? 1 : 0}]}> 
               <View style={styles.titleAndDescriptionContainer}>
-                <TouchableOpacity onPress={() => setModalOn(item)}>
+                <TouchableOpacity onPress={() => setModalOn(item)} onLongPress={drag}>
                   <Text numberOfLines={2} style={styles.titleText}>
                     {item.title}
                   </Text>
@@ -166,10 +170,16 @@ const MovieList = (props) => {
                 </Text>
               </View>
             </View>
+          {/* </TouchableOpacity> */}
         </Swipeable>
       </>
     );
   };
+
+  const onDragEnd = (data) => {
+    setMyData(data);
+    //Update movielist in appjs with new indices
+  }
 
   return(
     <View style={styles.componentContainerView}>
@@ -177,17 +187,16 @@ const MovieList = (props) => {
             <NoMoviesFound/>
           :
           <>
-            <FlatList
+            <DraggableFlatList
               ref={flatListRef}
-              data={props.allMoviesList}
-              renderItem={renderItem}
+              data={myData}
+              onDragEnd={({ data }) => onDragEnd(data)}
               keyExtractor={item => item.title}
+              renderItem={renderItem}
               contentContainerStyle={{ paddingBottom: 60}}
               getItemLayout={(data, index) => (
                 {length: 150, offset: 155 * index, index}
               )}
-              extraData={props.allMoviesList}
-              initialScrollIndex={0}
             />
             <MovieInfoModal isVisible={isModalVisible} modalOff={setModalOff} movieObj={currentMovie} updateUserMovieRating={handleUserRating} updateTitle={props.setNewTitle}/>         
           </>

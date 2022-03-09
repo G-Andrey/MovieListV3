@@ -155,12 +155,13 @@ const App = () => {
           }
           <MovieList 
             allMoviesList={
-              filteredState == 1 ?
-                listOfMovies.filter(mov => (mov.watchedState == 1))  
-              :
-              filteredState == 2 ?
-                listOfMovies.filter(mov => (mov.watchedState == 0))
-              : null      
+              // filteredState == 1 ?
+              //   listOfMovies.filter(mov => (mov.watchedState == 1))  
+              // :
+              // filteredState == 2 ?
+              //   listOfMovies.filter(mov => (mov.watchedState == 0))
+              // : null
+              listOfMovies 
             }   
             deleteMovie={deleteMovieByTitle}
             setWatched={setAsWatched}

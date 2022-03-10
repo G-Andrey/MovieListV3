@@ -9,6 +9,9 @@ const MovieSearchBar = (props) => {
   const { toast } = useToast()
 
   const handleSearchSubmit = () => {
+    if (movieSearchText === ''){
+      return
+    }
     webScrapeMovieData(movieSearchText);
     setMovieSearchText('');
   };

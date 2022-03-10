@@ -30,21 +30,34 @@ const ButtonBar = (props) => {
 
   useEffect( () => {
     handleClick(props.currentFilteredState)
-  }, [props.currentFilteredState]);
+  }, [props.currentFilteredState,props.listSizeWatched]);
 
   return (
     <View style={styles.componentContainerView}>
+
       <TouchableOpacity style={{flex:1}} onPress={() => handleClick(2)}>
         <View style={[styles.defaultView, unwatchedClicked ? styles.selectedView : null]}>
           <Text style={[styles.defaultText, unwatchedClicked ? styles.selectedText : null]}>
             Unwatched
+            <View style={styles.listSizeContainer}>
+              <Text style={[styles.listSizeText, unwatchedClicked ? styles.selectedText : null]}>
+                {props.listSizeUnwatched}
+              </Text>
+            </View>
           </Text>
         </View>
       </TouchableOpacity>
       <TouchableOpacity style={{flex:1}} onPress={() => handleClick(1)}>
         <View style={[styles.defaultView, watchClicked ? styles.selectedView : null]}>
-        <Text style={[styles.defaultText, watchClicked ? styles.selectedText : null]}>
+          <Text style={[styles.defaultText, watchClicked ? styles.selectedText : null]}>
             Watched
+            <Text style={styles.listSizeText}>
+              <View style={styles.listSizeContainer}>
+                <Text style={[styles.listSizeText, watchClicked ? styles.selectedText : null]}>
+                  {props.listSizeWatched}
+                </Text>
+              </View>
+            </Text>
           </Text>
         </View>
       </TouchableOpacity>
@@ -80,7 +93,16 @@ const styles = StyleSheet.create({
     },
     selectedView: {
       borderBottomColor:"#FFF"
-    }
+    },
+    listSizeContainer : {
+      paddingBottom: 13,
+      paddingLeft: 2,
+    },
+    listSizeText: {
+      fontSize: 10,
+      color:'#c9c9c9',
+      fontWeight:"bold",
+    },
   });
   
   export default ButtonBar;

@@ -170,11 +170,9 @@ const App = () => {
       const res1 = await AsyncStorage.getItem('@movie_list_unwatched')
       if (res1 != null){
         setListOfUnwatchedMovies(JSON.parse(res1))
-        setIsLoading(false)
       }
       else{
         console.log("loading unwatched movie list failed")
-        setIsLoading(false)
       }
 
       const res2 = await AsyncStorage.getItem('@movie_list_watched')
@@ -218,9 +216,6 @@ const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      {/* {console.log(listOfUnwatchedMovies)}
-      {console.log(listOfWatchedMovies)}
-      {console.log(filteredState)} */}
       <ToastProvider maxToasts={2} position="BOTTOM">
         <GestureHandlerRootView>
         <View>
@@ -236,6 +231,8 @@ const App = () => {
             filterWatched={setWatchedFiltered} 
             filterUnwatched={setUnwatchedFiltered} 
             currentFilteredState={filteredState}
+            listSizeWatched={listOfWatchedMovies.length}
+            listSizeUnwatched={listOfUnwatchedMovies.length}
           />
           <View style={styles.filteredTabSeperator}>
           </View>

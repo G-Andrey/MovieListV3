@@ -92,14 +92,14 @@ const App = () => {
     if (filteredState === 2){
       const newList = listOfUnwatchedMovies.map(mov => (mov.title === movieTitle ? {...mov, userRating: ratingValue} : mov))
       setListOfUnwatchedMovies(newList);
-      saveMovieList(newList,2);
+      saveMovieList(newList, 2);
     }
 
     //set user rating for movie from watched list
     else if (filteredState === 1){
       const newList = listOfWatchedMovies.map(mov => (mov.title === movieTitle ? {...mov, userRating: ratingValue} : mov))
       setListOfWatchedMovies(newList);
-      saveMovieList(newList,1);
+      saveMovieList(newList, 1);
     }
   };
 
@@ -120,6 +120,23 @@ const App = () => {
       data[index].title = newTitle;
       setListOfWatchedMovies(data);
       saveMovieList(data, filteredState);
+    }
+  };
+
+  //called from movielist.js after a rowItem is dragged up/down the list
+  //saves the new order of the list
+  //filtered state is checked to see which list was reordered
+  const updateMovieListOrder = (listUpdateOrder) => {
+    //update order of unwatched list
+    if (filteredState === 2){
+      setListOfUnwatchedMovies(listUpdateOrder);
+      saveMovieList(listUpdateOrder, 2);
+    }
+
+    //update order of watched list
+    else if (filteredState === 1){
+      setListOfWatchedMovies(listUpdateOrder);
+      saveMovieList(listUpdateOrder, 1);
     }
   };
 
@@ -244,6 +261,7 @@ const App = () => {
             setScrollEndComplete={scrollToEndComplete}
             setNewUserRating={setUserRatingOfMovie}
             setNewTitle={editTitle}
+            updateListOrder={updateMovieListOrder}
           />
         </View>
         </GestureHandlerRootView>

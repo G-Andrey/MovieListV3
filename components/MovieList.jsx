@@ -179,6 +179,7 @@ const MovieList = (props) => {
   const onDragEnd = (data) => {
     setMyData(data);
     //Update movielist in appjs with new indices
+    props.updateListOrder(data);
   }
 
   return(

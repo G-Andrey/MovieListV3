@@ -21,7 +21,7 @@ const MyStatusBar = ({backgroundColor, ...props}) => (
 );
 
 const App = () => {
-  const [filteredState, setFilteredState] = useState(2);   //0 = All, 1 = watched, 2 = unwatched
+  const [filteredState, setFilteredState] = useState(1);   //0 = All, 1 = watched, 2 = unwatched
   const [isLoadingMovie, setIsLoadingMovie] = useState(false);
   const [triggerScrollToEnd, setTriggerScrollToEnd] = useState(false);
   const [isLoading, setIsLoading] = useState();
@@ -179,10 +179,12 @@ const App = () => {
       if (res2 != null){
         setListOfWatchedMovies(JSON.parse(res2))
         setIsLoading(false)
+        setFilteredState(2)
       }
       else{
         console.log("loading watched movie list failed")
         setIsLoading(false)
+        setFilteredState(2)
       }
     }
     catch(e){

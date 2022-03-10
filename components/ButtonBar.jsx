@@ -29,9 +29,7 @@ const ButtonBar = (props) => {
   };
 
   useEffect( () => {
-    if(props.currentFilteredState == 2){
-      handleClick(2)
-    }
+    handleClick(props.currentFilteredState)
   }, [props.currentFilteredState]);
 
   return (

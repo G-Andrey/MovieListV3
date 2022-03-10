@@ -20,77 +20,166 @@ const MyStatusBar = ({backgroundColor, ...props}) => (
 );
 
 const App = () => {
-  const [listOfMovies, setListOFMovies] = useState([]); //Array to store all movie objects
   const [filteredState, setFilteredState] = useState(2);   //0 = All, 1 = watched, 2 = unwatched
   const [isLoadingMovie, setIsLoadingMovie] = useState(false);
   const [triggerScrollToEnd, setTriggerScrollToEnd] = useState(false);
   const [isLoading, setIsLoading] = useState();
+  const [listOfWatchedMovies, setListOfWatchedMovies] = useState([]); //Array to store all watched movie objects
+  const [listOfUnwatchedMovies, setListOfUnwatchedMovies] = useState([]); //Array to store all unwatched movie objects
   
   const addMovieToList = (newMovieObj) => {
-    const newList = [newMovieObj, ...listOfMovies]
-    setListOFMovies(newList);
-    saveMovieList(newList);
+    const newList = [newMovieObj, ...listOfUnwatchedMovies]
+    setListOfUnwatchedMovies(newList);
+    saveMovieList(newList, 2);
     setFilteredState(2);
     setTriggerScrollToEnd(true);
-    setIsLoadingMovie(false)
+    setIsLoadingMovie(false);
   };
 
   const deleteMovieByTitle = (movieTitle) => {
-    var newList = listOfMovies.filter( mov => {
-      return mov.title !== movieTitle;
-    })
-    setListOFMovies(newList);
-    saveMovieList(newList);
+    //remove movie from unwatched list
+    if (filteredState === 2){
+      var newList = listOfUnwatchedMovies.filter( mov => {
+        return mov.title !== movieTitle;
+      })
+      setListOfUnwatchedMovies(newList);
+    }
+
+    //remove movie from watched list
+    else if (filteredState === 1){
+      var newList = listOfWatchedMovies.filter( mov => {
+        return mov.title !== movieTitle;
+      })
+      setListOfWatchedMovies(newList);
+    }
+    saveMovieList(newList, filteredState);
   };
 
   const setAsWatched = (movieTitle) => {
-    var data = [...listOfMovies];
-    var index = data.findIndex(obj => obj.title === movieTitle);
-    data[index].watchedState = 1;
-    setListOFMovies(data);
-    saveMovieList(data);
+    var listUnwatched = [...listOfUnwatchedMovies];
+    
+    var index = listUnwatched.findIndex(obj => obj.title === movieTitle);
+    var movieObj = listUnwatched.splice(index, 1)[0];
+    movieObj.watchedState = 1;
+
+    var listWatched = [movieObj, ...listOfWatchedMovies]
+
+    setListOfWatchedMovies(listWatched);
+    setListOfUnwatchedMovies(listUnwatched);
+    saveMovieList(listWatched, 1);
+    saveMovieList(listUnwatched, 2);
+    // setFilteredState(1);
   };
 
   const setAsUnWatched = (movieTitle) => {
-    const newList = listOfMovies.map(mov => (mov.title === movieTitle ? {...mov, watchedState: 0} : mov))
-    setListOFMovies(newList)
-    saveMovieList(newList);
+    var listWatched = [...listOfWatchedMovies];
+    
+    var index = listWatched.findIndex(obj => obj.title === movieTitle);
+    var movieObj = listWatched.splice(index, 1)[0];
+    movieObj.watchedState = 0;
+
+    var listUnwatched = [movieObj, ...listOfUnwatchedMovies]
+
+    setListOfWatchedMovies(listWatched);
+    setListOfUnwatchedMovies(listUnwatched);
+    saveMovieList(listWatched, 1);
+    saveMovieList(listUnwatched, 2);
+    // setFilteredState(2);
   };
 
   const setUserRatingOfMovie = (movieTitle, ratingValue) => {
-    const newList = listOfMovies.map(mov => (mov.title === movieTitle ? {...mov, userRating: ratingValue} : mov))
-    setListOFMovies(newList)
-    saveMovieList(newList);
+    //set user rating for movie from unwatched list
+    if (filteredState === 2){
+      const newList = listOfUnwatchedMovies.map(mov => (mov.title === movieTitle ? {...mov, userRating: ratingValue} : mov))
+      setListOfUnwatchedMovies(newList);
+      saveMovieList(newList, 2);
+    }
+
+    //set user rating for movie from watched list
+    else if (filteredState === 1){
+      const newList = listOfWatchedMovies.map(mov => (mov.title === movieTitle ? {...mov, userRating: ratingValue} : mov))
+      setListOfWatchedMovies(newList);
+      saveMovieList(newList, 1);
+    }
   };
 
   const editTitle = (currTitle, newTitle) => {
-    var data = [...listOfMovies];
-    var index = data.findIndex(obj => obj.title === currTitle);
-    data[index].title = newTitle;
-    setListOFMovies(data);
-    saveMovieList(data);
+    //edit title of movie from unwatched list
+    if (filteredState === 2){
+      var data = [...listOfUnwatchedMovies];
+      var index = data.findIndex(obj => obj.title === currTitle);
+      data[index].title = newTitle;
+      setListOfUnwatchedMovies(data);
+      saveMovieList(data, filteredState);
+    }
+
+    //edit title of movie from watched list
+    else if (filteredState === 1){
+      var data = [...listOfWatchedMovies];
+      var index = data.findIndex(obj => obj.title === currTitle);
+      data[index].title = newTitle;
+      setListOfWatchedMovies(data);
+      saveMovieList(data, filteredState);
+    }
   };
 
-  const saveMovieList = async(updatedList) => {
+  //called from movielist.js after a rowItem is dragged up/down the list
+  //saves the new order of the list
+  //filtered state is checked to see which list was reordered
+  const updateMovieListOrder = (listUpdateOrder) => {
+    //update order of unwatched list
+    if (filteredState === 2){
+      setListOfUnwatchedMovies(listUpdateOrder);
+      saveMovieList(listUpdateOrder, 2);
+    }
+
+    //update order of watched list
+    else if (filteredState === 1){
+      setListOfWatchedMovies(listUpdateOrder);
+      saveMovieList(listUpdateOrder, 1);
+    }
+  };
+
+  const saveMovieList = async(updatedList, whichList) => {
     try{
-      const json = JSON.stringify(updatedList)
-      await AsyncStorage.setItem('@movie_list',json)
+      //save unwatched movie list
+      if (whichList === 2){
+        const json = JSON.stringify(updatedList)
+        await AsyncStorage.setItem('@movie_list_unwatched',json)
+      }
+
+      //save watched movie list
+      else if (whichList === 1){
+        const json = JSON.stringify(updatedList)
+        await AsyncStorage.setItem('@movie_list_watched',json)
+      }
+
     }
     catch(e){
       console.log("saving failed")
     }
   };
 
-  const loadMovieList = async() =>{
+  const loadMovieList = async() => {
     setIsLoading(true)
     try{
-      const res = await AsyncStorage.getItem('@movie_list')
-      if (res != null){
-        setListOFMovies(JSON.parse(res))
+      const res1 = await AsyncStorage.getItem('@movie_list_unwatched')
+      if (res1 != null){
+        setListOfUnwatchedMovies(JSON.parse(res1))
         setIsLoading(false)
       }
       else{
-        console.log("loading failed")
+        console.log("loading unwatched movie list failed")
+        setIsLoading(false)
+      }
+
+      const res2 = await AsyncStorage.getItem('@movie_list_watched')
+      if (res2 != null){
+        setListOfWatchedMovies(JSON.parse(res2))
+        setIsLoading(false)
+      }
+      else{
+        console.log("loading watched movie list failed")
         setIsLoading(false)
       }
     }
@@ -125,6 +214,9 @@ const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
+      {/* {console.log(listOfUnwatchedMovies)}
+      {console.log(listOfWatchedMovies)}
+      {console.log(filteredState)} */}
       <ToastProvider maxToasts={2} position="BOTTOM">
         <GestureHandlerRootView>
         <View>
@@ -135,7 +227,7 @@ const App = () => {
             overlayColor="rgba(0, 0, 0, 0.75)"
           />
           <MyStatusBar backgroundColor='grey'/>
-          <MovieSearchBar addMovie={addMovieToList} currentMovieList={listOfMovies} triggerLoading={triggerLoadingMovieIndicator} cancelMovieLoading={cancelLoadingMovieIndicator}/>
+          <MovieSearchBar addMovie={addMovieToList} currentWatchedMovieList={listOfWatchedMovies} currentUnwatchedMovieList={listOfUnwatchedMovies} triggerLoading={triggerLoadingMovieIndicator} cancelMovieLoading={cancelLoadingMovieIndicator}/>
           <ButtonBar 
             filterWatched={setWatchedFiltered} 
             filterUnwatched={setUnwatchedFiltered} 
@@ -156,11 +248,11 @@ const App = () => {
           <MovieList 
             allMoviesList={
               filteredState == 1 ?
-                listOfMovies.filter(mov => (mov.watchedState == 1))  
+                listOfWatchedMovies  
               :
               filteredState == 2 ?
-                listOfMovies.filter(mov => (mov.watchedState == 0))
-              : null      
+                listOfUnwatchedMovies
+              : null
             }   
             deleteMovie={deleteMovieByTitle}
             setWatched={setAsWatched}
@@ -169,6 +261,7 @@ const App = () => {
             setScrollEndComplete={scrollToEndComplete}
             setNewUserRating={setUserRatingOfMovie}
             setNewTitle={editTitle}
+            updateListOrder={updateMovieListOrder}
           />
         </View>
         </GestureHandlerRootView>

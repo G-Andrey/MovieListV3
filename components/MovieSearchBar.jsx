@@ -139,7 +139,7 @@ const MovieSearchBar = (props) => {
 
       else{
         //checks if newly scraped movie title is already in the list
-        if(props.currentMovieList.find( mov => mov.title == movieTitle) == undefined){
+        if(props.currentWatchedMovieList.find( mov => mov.title == movieTitle) == undefined & props.currentUnwatchedMovieList.find( mov => mov.title == movieTitle) == undefined ){
           props.addMovie({
             title: movieTitle,
             description: movieDesc,

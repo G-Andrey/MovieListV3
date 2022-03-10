@@ -178,13 +178,13 @@ const App = () => {
       const res2 = await AsyncStorage.getItem('@movie_list_watched')
       if (res2 != null){
         setListOfWatchedMovies(JSON.parse(res2))
-        setIsLoading(false)
         setFilteredState(2)
+        setIsLoading(false)
       }
       else{
         console.log("loading watched movie list failed")
-        setIsLoading(false)
         setFilteredState(2)
+        setIsLoading(false)
       }
     }
     catch(e){

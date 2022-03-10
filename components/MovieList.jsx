@@ -34,7 +34,7 @@ const MovieList = (props) => {
   };
 
   useEffect( () =>{
-    handleEndScroll();
+    // handleEndScroll();
     setMyData(props.allMoviesList);
   }, [props.handleScrollEnd, props.allMoviesList]);
 

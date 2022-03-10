@@ -135,7 +135,11 @@ const MovieInfoModal = (props) => {
                             :
                               {color:"#ffd600"}
                           ]}>
-                            {props.movieObj.rating}
+                            {isNaN(parseInt(props.movieObj.rating)) ?
+                              "??"
+                                :
+                              parseInt(props.movieObj.rating) + '%'
+                            }
                           </Text>
                         </View>
                         <Text style={styles.sectionLabel}>

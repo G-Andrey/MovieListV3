@@ -170,7 +170,11 @@ const MovieList = (props) => {
                   :
                     {color:"#ffd600"}
                   ]}>
-                  {item.rating}
+                  {isNaN(parseInt(item.rating)) ?
+                    "??"
+                      :
+                    parseInt(item.rating) + '%'
+                  }
                 </Text>
               </View>
             </View>

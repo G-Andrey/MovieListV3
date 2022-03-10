@@ -6,6 +6,7 @@ import IconDelete from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconEye from 'react-native-vector-icons/Ionicons';
 import { useToast } from 'react-native-styled-toast';
 import DraggableFlatList, {useOnCellActiveAnimation} from 'react-native-draggable-flatlist'
+import * as Haptics from 'expo-haptics';
 
 import NoMoviesFound from './NoMoviesFound';
 import MovieInfoModal from './MovieInfoModal';
@@ -191,6 +192,7 @@ const MovieList = (props) => {
             <DraggableFlatList
               ref={flatListRef}
               data={myData}
+              onDragBegin={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)}
               onDragEnd={({ data }) => onDragEnd(data)}
               keyExtractor={item => item.title}
               renderItem={renderItem}

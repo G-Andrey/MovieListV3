@@ -40,6 +40,7 @@ const MovieList = (props) => {
   }, [props.handleScrollEnd, props.allMoviesList]);
 
   const onRightPress = (movieTitle) => {
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Medium)
     props.deleteMovie(movieTitle)
     toast({
       message: `${movieTitle} deleted`,
@@ -48,6 +49,7 @@ const MovieList = (props) => {
   };
 
   const handleSetWatched = (movieTitle) => {
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Medium)
     props.setWatched(movieTitle)
     toast({
       message: `${movieTitle} set as watched`,
@@ -58,6 +60,7 @@ const MovieList = (props) => {
   };
 
   const handleSetUnwatched = (movieTitle) => {
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Medium)
     props.setUnwatched(movieTitle)
     toast({
       message: `${movieTitle} set as unwatched`,
@@ -181,6 +184,7 @@ const MovieList = (props) => {
     setMyData(data);
     //Update movielist in appjs with new indices
     props.updateListOrder(data);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
   }
 
   return(
@@ -192,7 +196,7 @@ const MovieList = (props) => {
             <DraggableFlatList
               ref={flatListRef}
               data={myData}
-              onDragBegin={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)}
+              onDragBegin={() => Haptics.selectionAsync()}
               onDragEnd={({ data }) => onDragEnd(data)}
               keyExtractor={item => item.title}
               renderItem={renderItem}

@@ -6,6 +6,7 @@ import theme from './components/theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import * as Haptics from 'expo-haptics';
 
 import MovieSearchBar from './components/MovieSearchBar';
 import ButtonBar from './components/ButtonBar';
@@ -34,6 +35,7 @@ const App = () => {
     setFilteredState(2);
     setTriggerScrollToEnd(true);
     setIsLoadingMovie(false);
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
   };
 
   const deleteMovieByTitle = (movieTitle) => {
@@ -123,9 +125,11 @@ const App = () => {
     }
   };
 
-  //called from movielist.js after a rowItem is dragged up/down the list
-  //saves the new order of the list
-  //filtered state is checked to see which list was reordered
+  /*
+    called from movielist.js after a rowItem is dragged up/down the list
+    saves the new order of the list
+    filtered state is checked to see which list was reordered
+  */
   const updateMovieListOrder = (listUpdateOrder) => {
     //update order of unwatched list
     if (filteredState === 2){

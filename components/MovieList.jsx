@@ -136,6 +136,7 @@ const MovieList = (props) => {
           onSwipeableLeftOpen={item.watchedState == 0 ? () => handleSetWatched(item.title) : (() => handleSetUnwatched(item.title))}
           renderRightActions={(progress, dragX) => <RightActions progress={progress} dragX={dragX} onPress={() => onRightPress(item.title)}/>}
         >   
+          <TouchableOpacity onLongPress={drag} activeOpacity={1}>
             <View style={[styles.rowView, {backgroundColor: isActive ? '#2e2e2e' : '#383838', borderColor: isActive ? 'white' : null, borderWidth: isActive ? 1 : 0}]}> 
               <View style={styles.titleAndDescriptionContainer}>
                 <TouchableOpacity onPress={() => setModalOn(item)} onLongPress={drag}>
@@ -183,7 +184,7 @@ const MovieList = (props) => {
                 </Text>
               </View>
             </View>
-          {/* </TouchableOpacity> */}
+          </TouchableOpacity>
         </Swipeable>
       </>
     );

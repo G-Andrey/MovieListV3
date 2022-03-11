@@ -13,8 +13,9 @@ const Seperator = () => {
 
 const MovieInfoModal = (props) => {
   const [currentTitle, setCurrentTitle] = useState('') //stores title of the current obj, used to refernce movie in the movielist array
-  const [newTitle, setNewTitle] = useState(''); //keeps track of the title if gets changed
+  const [newTitle, setNewTitle] = useState(''); //keeps track of the title if it gets changed
   const [editable, setEditable] = useState();
+  const [newComments, setNewComments] = useState(''); //keeps track of the comments if it gets changed
   const titleText = useRef(null)
 
   useEffect( () => {
@@ -31,6 +32,10 @@ const MovieInfoModal = (props) => {
       setNewTitle(currentTitle)
     }
     setEditable(false)
+  };
+
+  onCommentTextEnd = () => {
+    props.updateComments(currentTitle, newComments)
   };
   
   handleTitleLongPress = () => {
@@ -181,9 +186,11 @@ const MovieInfoModal = (props) => {
                           placeholder="Tap to edit comment"    
                           returnKeyType='done'
                           blurOnSubmit={true}
-                          textAlign={'center'}             
+                          textAlign={'center'}
+                          onChangeText={text => setNewComments(text)}
+                          onEndEditing={() => onCommentTextEnd()}          
                         >
-                          
+                          {props.movieObj.userComments}
                         </TextInput>
                         <Text style={styles.sectionLabel}>
                           RATE MOVIE

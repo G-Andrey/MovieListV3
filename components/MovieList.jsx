@@ -209,7 +209,14 @@ const MovieList = (props) => {
                 {length: 150, offset: 155 * index, index}
               )}
             />
-            <MovieInfoModal isVisible={isModalVisible} modalOff={setModalOff} movieObj={currentMovie} updateUserMovieRating={handleUserRating} updateTitle={props.setNewTitle}/>         
+            <MovieInfoModal 
+              isVisible={isModalVisible} 
+              modalOff={setModalOff} 
+              movieObj={currentMovie} 
+              updateUserMovieRating={handleUserRating} 
+              updateTitle={props.setNewTitle}
+              updateComments={props.setNewComments}
+            />         
           </>
         }
     </View>

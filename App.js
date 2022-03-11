@@ -125,6 +125,26 @@ const App = () => {
     }
   };
 
+  const editComments = (currTitle, newComments) => {
+    //edit title of movie from unwatched list
+    if (filteredState === 2){
+      var data = [...listOfUnwatchedMovies];
+      var index = data.findIndex(obj => obj.title === currTitle);
+      data[index].userComments = newComments;
+      setListOfUnwatchedMovies(data);
+      saveMovieList(data, filteredState);
+    }
+
+    //edit title of movie from watched list
+    else if (filteredState === 1){
+      var data = [...listOfWatchedMovies];
+      var index = data.findIndex(obj => obj.title === currTitle);
+      data[index].userComments = newComments;
+      setListOfWatchedMovies(data);
+      saveMovieList(data, filteredState);
+    }
+  };
+
   /*
     called from movielist.js after a rowItem is dragged up/down the list
     saves the new order of the list
@@ -264,6 +284,7 @@ const App = () => {
             setScrollEndComplete={scrollToEndComplete}
             setNewUserRating={setUserRatingOfMovie}
             setNewTitle={editTitle}
+            setNewComments={editComments}
             updateListOrder={updateMovieListOrder}
           />
         </View>

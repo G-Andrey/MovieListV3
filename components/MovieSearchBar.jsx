@@ -159,6 +159,7 @@ const MovieSearchBar = (props) => {
             trailerUrl: youtubeTrailerUrl,
             userRating: 5,
             dateAdded: new Date().toLocaleString('en-US', {timeZone: 'EST', hour: 'numeric', minute: '2-digit'}),
+            userComments: "",
           });
           toast({
             message: `${movieTitle} has been added`,

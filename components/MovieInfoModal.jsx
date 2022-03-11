@@ -170,6 +170,22 @@ const MovieInfoModal = (props) => {
                           }
                         </Text>
                         <Text style={styles.sectionLabel}>
+                          Comments
+                        </Text>
+                        <TextInput
+                          editable
+                          multiline={true}
+                          maxLength={140}
+                          numberOfLines={3} 
+                          style={styles.commentBox}
+                          placeholder="Tap to edit comment"    
+                          returnKeyType='done'
+                          blurOnSubmit={true}
+                          textAlign={'center'}             
+                        >
+                          
+                        </TextInput>
+                        <Text style={styles.sectionLabel}>
                           RATE MOVIE
                         </Text>
                         <AirbnbRating
@@ -269,7 +285,6 @@ const styles = StyleSheet.create({
     marginVertical:5
   },
   sectionLabel: {
-    color:'black',
     fontStyle:'italic',
     fontWeight:"bold",
     color:"grey",
@@ -289,6 +304,17 @@ const styles = StyleSheet.create({
     color:'black',
     marginBottom:5,
     // paddingHorizontal: 5
+  },
+  commentBox: {
+    borderColor: 'grey',
+    borderWidth:1, 
+    padding:5, 
+    marginVertical: 5, 
+    marginHorizontal: 20,
+    textAlignVertical:'top', 
+    maxHeight:100, 
+    maxWidth:'100%',
+    borderRadius:5
   },
   dateAddedText: {
     textAlign:"center",

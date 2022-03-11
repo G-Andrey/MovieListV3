@@ -274,7 +274,8 @@ const styles = StyleSheet.create({
     fontWeight:"bold",
     color:"grey",
     marginLeft:10,
-    fontSize:20
+    fontSize:20,
+    marginVertical: 5
   },
   descriptionText: {
     textAlign:"center",
@@ -286,7 +287,8 @@ const styles = StyleSheet.create({
     textAlign:"center",
     marginHorizontal:5,
     color:'black',
-    marginBottom:5
+    marginBottom:5,
+    // paddingHorizontal: 5
   },
   dateAddedText: {
     textAlign:"center",

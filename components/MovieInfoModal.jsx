@@ -103,7 +103,7 @@ const MovieInfoModal = (props) => {
                         <Text style={styles.sectionLabel}>
                           GENRE
                         </Text>
-                        <Text style={{textAlign:"center",color:'black'}}>
+                        <Text style={styles.genreText}>
                           {props.movieObj.genre ? 
                             props.movieObj.genre
                             :
@@ -124,7 +124,7 @@ const MovieInfoModal = (props) => {
                               :
                               require('../assets/rt-certified-fresh.png')
                             }
-                            style={{ width: 30, height: 30, marginRight:10 }}
+                            style={styles.rtImageIcon}
                           />
                           <Text style={[{color:"red",fontWeight:"bold",fontSize:20}, 
                             parseInt(props.movieObj.rating) <= 60 ? 
@@ -181,6 +181,12 @@ const MovieInfoModal = (props) => {
                           onFinishRating={rating => props.updateUserMovieRating(rating)}
                           starContainerStyle={{marginBottom:10}}
                         />
+                        <Text style={styles.sectionLabel}>
+                          Date Added
+                        </Text>
+                        <Text style={styles.dateAddedText}>
+                          {props.movieObj.dateAdded}
+                        </Text>
                       </View>                       
                     </View>
                   </View>                 
@@ -217,6 +223,10 @@ const styles = StyleSheet.create({
     marginVertical:5,
     color:"black"
   },
+  genreText: {
+    textAlign:"center",
+    color:'black'
+  },
   posterImgContainer: {
     flex:1,
     flexDirection:'row',
@@ -229,6 +239,11 @@ const styles = StyleSheet.create({
     height:458, 
     borderColor:'black', 
     borderWidth:1,
+  },
+  rtImageIcon:{
+    width: 30, 
+    height: 30, 
+    marginRight:10 
   },
   ytLinkContainer: {
     flex:1,
@@ -273,6 +288,11 @@ const styles = StyleSheet.create({
     color:'black',
     marginBottom:5
   },
+  dateAddedText: {
+    textAlign:"center",
+    color:'black', 
+    marginBottom: 5,
+  },  
   ratingContainer: {
     flex:1,
     flexDirection:'row',

@@ -10,6 +10,7 @@ import * as Haptics from 'expo-haptics';
 
 import NoMoviesFound from './NoMoviesFound';
 import MovieInfoModal from './MovieInfoModal';
+import { textAlign } from 'styled-system';
 
 const MovieList = (props) => { 
   const flatListRef = useRef()
@@ -141,8 +142,12 @@ const MovieList = (props) => {
                   <Text numberOfLines={2} style={styles.titleText}>
                     {item.title}
                   </Text>
-                  <Text numberOfLines={4} style={styles.descriptionText}>
-                    {item.description}
+                  <Text numberOfLines={3} style={[styles.descriptionText, {textAlign: item.description ? null: 'center'}]}>
+                    {item.description ? 
+                    item.description
+                    :
+                    "Could not find description"
+                    }
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -265,6 +270,7 @@ const styles = StyleSheet.create({
     overflow:"hidden",
     marginLeft:10,
     marginBottom:10,
+    // textAlign:'center'
   },
   verticalSeperator: {
     width:1,

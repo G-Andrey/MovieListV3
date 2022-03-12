@@ -6,6 +6,7 @@ import theme from './components/theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import * as Haptics from 'expo-haptics';
 
 import MovieSearchBar from './components/MovieSearchBar';
 import ButtonBar from './components/ButtonBar';
@@ -20,7 +21,7 @@ const MyStatusBar = ({backgroundColor, ...props}) => (
 );
 
 const App = () => {
-  const [filteredState, setFilteredState] = useState(2);   //0 = All, 1 = watched, 2 = unwatched
+  const [filteredState, setFilteredState] = useState(1);   //0 = All, 1 = watched, 2 = unwatched
   const [isLoadingMovie, setIsLoadingMovie] = useState(false);
   const [triggerScrollToEnd, setTriggerScrollToEnd] = useState(false);
   const [isLoading, setIsLoading] = useState();
@@ -34,6 +35,7 @@ const App = () => {
     setFilteredState(2);
     setTriggerScrollToEnd(true);
     setIsLoadingMovie(false);
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
   };
 
   const deleteMovieByTitle = (movieTitle) => {
@@ -123,9 +125,31 @@ const App = () => {
     }
   };
 
-  //called from movielist.js after a rowItem is dragged up/down the list
-  //saves the new order of the list
-  //filtered state is checked to see which list was reordered
+  const editComments = (currTitle, newComments) => {
+    //edit title of movie from unwatched list
+    if (filteredState === 2){
+      var data = [...listOfUnwatchedMovies];
+      var index = data.findIndex(obj => obj.title === currTitle);
+      data[index].userComments = newComments;
+      setListOfUnwatchedMovies(data);
+      saveMovieList(data, filteredState);
+    }
+
+    //edit title of movie from watched list
+    else if (filteredState === 1){
+      var data = [...listOfWatchedMovies];
+      var index = data.findIndex(obj => obj.title === currTitle);
+      data[index].userComments = newComments;
+      setListOfWatchedMovies(data);
+      saveMovieList(data, filteredState);
+    }
+  };
+
+  /*
+    called from movielist.js after a rowItem is dragged up/down the list
+    saves the new order of the list
+    filtered state is checked to see which list was reordered
+  */
   const updateMovieListOrder = (listUpdateOrder) => {
     //update order of unwatched list
     if (filteredState === 2){
@@ -166,21 +190,21 @@ const App = () => {
       const res1 = await AsyncStorage.getItem('@movie_list_unwatched')
       if (res1 != null){
         setListOfUnwatchedMovies(JSON.parse(res1))
-        setIsLoading(false)
       }
       else{
         console.log("loading unwatched movie list failed")
-        setIsLoading(false)
       }
 
       const res2 = await AsyncStorage.getItem('@movie_list_watched')
       if (res2 != null){
         setListOfWatchedMovies(JSON.parse(res2))
         setIsLoading(false)
+        setFilteredState(2)
       }
       else{
         console.log("loading watched movie list failed")
         setIsLoading(false)
+        setFilteredState(2)
       }
     }
     catch(e){
@@ -214,9 +238,6 @@ const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      {/* {console.log(listOfUnwatchedMovies)}
-      {console.log(listOfWatchedMovies)}
-      {console.log(filteredState)} */}
       <ToastProvider maxToasts={2} position="BOTTOM">
         <GestureHandlerRootView>
         <View>
@@ -232,6 +253,8 @@ const App = () => {
             filterWatched={setWatchedFiltered} 
             filterUnwatched={setUnwatchedFiltered} 
             currentFilteredState={filteredState}
+            listSizeWatched={listOfWatchedMovies.length}
+            listSizeUnwatched={listOfUnwatchedMovies.length}
           />
           <View style={styles.filteredTabSeperator}>
           </View>
@@ -261,6 +284,7 @@ const App = () => {
             setScrollEndComplete={scrollToEndComplete}
             setNewUserRating={setUserRatingOfMovie}
             setNewTitle={editTitle}
+            setNewComments={editComments}
             updateListOrder={updateMovieListOrder}
           />
         </View>

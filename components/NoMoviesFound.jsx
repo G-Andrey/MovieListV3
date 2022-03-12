@@ -16,7 +16,7 @@ class NoMoviesFound extends React.Component {
           duration: 150,
           easing: Easing.linear,
           useNativeDriver: true,
-          delay:100
+          delay:2000
         }
     ).start(() => this.handleAnimation());
   }

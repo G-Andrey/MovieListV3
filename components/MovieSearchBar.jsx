@@ -9,6 +9,9 @@ const MovieSearchBar = (props) => {
   const { toast } = useToast()
 
   const handleSearchSubmit = () => {
+    if (movieSearchText === ''){
+      return
+    }
     webScrapeMovieData(movieSearchText);
     setMovieSearchText('');
   };
@@ -94,6 +97,7 @@ const MovieSearchBar = (props) => {
       if(rottenTomatoeURL.includes('https://www.rottentomatoes.com/tv/')){
         //Retreiving movie title
         movieTitle = $1(".mop-ratings-wrap__title.mop-ratings-wrap__title--top").text().trim()
+        movieTitle = movieTitle+ ' (s.)'
         //console.log("Fetched movie title:",movieTitle)
   
         //Retrieving movie rating
@@ -111,9 +115,12 @@ const MovieSearchBar = (props) => {
         //Retrieving movie genre
         movieGenre = $1('[data-qa="series-details-genre"]').text()
         
-        movieCast.push($1(".characters.subtle.smaller")[0].attribs.title)
-        movieCast.push($1(".characters.subtle.smaller")[1].attribs.title)
-        movieCast.push($1(".characters.subtle.smaller")[2].attribs.title)
+        var cast = $1('[data-qa="cast-member"]').first().text()
+        movieCast.push(cast) 
+        cast = $1('[data-qa="cast-member"]').first().next().text()
+        movieCast.push(cast) 
+        cast = $1('[data-qa="cast-member"]').first().next().next().text()
+        movieCast.push(cast) 
       }
       
       //Retrieving youtube trailer link from google, getting the href of thhe top result
@@ -151,6 +158,8 @@ const MovieSearchBar = (props) => {
             rtUrl: rottenTomatoeURL,
             trailerUrl: youtubeTrailerUrl,
             userRating: 5,
+            dateAdded: new Date().toLocaleString('en-US', {timeZone: 'EST', hour: 'numeric', minute: '2-digit'}),
+            userComments: "",
           });
           toast({
             message: `${movieTitle} has been added`,

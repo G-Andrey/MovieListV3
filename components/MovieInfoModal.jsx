@@ -13,8 +13,9 @@ const Seperator = () => {
 
 const MovieInfoModal = (props) => {
   const [currentTitle, setCurrentTitle] = useState('') //stores title of the current obj, used to refernce movie in the movielist array
-  const [newTitle, setNewTitle] = useState(''); //keeps track of the title if gets changed
+  const [newTitle, setNewTitle] = useState(''); //keeps track of the title if it gets changed
   const [editable, setEditable] = useState();
+  const [newComments, setNewComments] = useState(''); //keeps track of the comments if it gets changed
   const titleText = useRef(null)
 
   useEffect( () => {
@@ -31,6 +32,10 @@ const MovieInfoModal = (props) => {
       setNewTitle(currentTitle)
     }
     setEditable(false)
+  };
+
+  onCommentTextEnd = () => {
+    props.updateComments(currentTitle, newComments)
   };
   
   handleTitleLongPress = () => {
@@ -103,7 +108,7 @@ const MovieInfoModal = (props) => {
                         <Text style={styles.sectionLabel}>
                           GENRE
                         </Text>
-                        <Text style={{textAlign:"center",color:'black'}}>
+                        <Text style={styles.genreText}>
                           {props.movieObj.genre ? 
                             props.movieObj.genre
                             :
@@ -124,7 +129,7 @@ const MovieInfoModal = (props) => {
                               :
                               require('../assets/rt-certified-fresh.png')
                             }
-                            style={{ width: 30, height: 30, marginRight:10 }}
+                            style={styles.rtImageIcon}
                           />
                           <Text style={[{color:"red",fontWeight:"bold",fontSize:20}, 
                             parseInt(props.movieObj.rating) <= 60 ? 
@@ -135,7 +140,11 @@ const MovieInfoModal = (props) => {
                             :
                               {color:"#ffd600"}
                           ]}>
-                            {props.movieObj.rating}
+                            {isNaN(parseInt(props.movieObj.rating)) ?
+                              "??"
+                                :
+                              parseInt(props.movieObj.rating) + '%'
+                            }
                           </Text>
                         </View>
                         <Text style={styles.sectionLabel}>
@@ -166,6 +175,24 @@ const MovieInfoModal = (props) => {
                           }
                         </Text>
                         <Text style={styles.sectionLabel}>
+                          Comments
+                        </Text>
+                        <TextInput
+                          editable
+                          multiline={true}
+                          maxLength={140}
+                          numberOfLines={3} 
+                          style={styles.commentBox}
+                          placeholder="Tap to edit comment"    
+                          returnKeyType='done'
+                          blurOnSubmit={true}
+                          textAlign={'center'}
+                          onChangeText={text => setNewComments(text)}
+                          onEndEditing={() => onCommentTextEnd()}          
+                        >
+                          {props.movieObj.userComments}
+                        </TextInput>
+                        <Text style={styles.sectionLabel}>
                           RATE MOVIE
                         </Text>
                         <AirbnbRating
@@ -177,6 +204,12 @@ const MovieInfoModal = (props) => {
                           onFinishRating={rating => props.updateUserMovieRating(rating)}
                           starContainerStyle={{marginBottom:10}}
                         />
+                        <Text style={styles.sectionLabel}>
+                          Date Added
+                        </Text>
+                        <Text style={styles.dateAddedText}>
+                          {props.movieObj.dateAdded}
+                        </Text>
                       </View>                       
                     </View>
                   </View>                 
@@ -213,6 +246,10 @@ const styles = StyleSheet.create({
     marginVertical:5,
     color:"black"
   },
+  genreText: {
+    textAlign:"center",
+    color:'black'
+  },
   posterImgContainer: {
     flex:1,
     flexDirection:'row',
@@ -225,6 +262,11 @@ const styles = StyleSheet.create({
     height:458, 
     borderColor:'black', 
     borderWidth:1,
+  },
+  rtImageIcon:{
+    width: 30, 
+    height: 30, 
+    marginRight:10 
   },
   ytLinkContainer: {
     flex:1,
@@ -250,12 +292,12 @@ const styles = StyleSheet.create({
     marginVertical:5
   },
   sectionLabel: {
-    color:'black',
     fontStyle:'italic',
     fontWeight:"bold",
     color:"grey",
     marginLeft:10,
-    fontSize:20
+    fontSize:20,
+    marginVertical: 5
   },
   descriptionText: {
     textAlign:"center",
@@ -267,8 +309,25 @@ const styles = StyleSheet.create({
     textAlign:"center",
     marginHorizontal:5,
     color:'black',
-    marginBottom:5
+    marginBottom:5,
+    // paddingHorizontal: 5
   },
+  commentBox: {
+    borderColor: 'grey',
+    borderWidth:1, 
+    padding:5, 
+    marginVertical: 5, 
+    marginHorizontal: 20,
+    textAlignVertical:'top', 
+    maxHeight:100, 
+    maxWidth:'100%',
+    borderRadius:5
+  },
+  dateAddedText: {
+    textAlign:"center",
+    color:'black', 
+    marginBottom: 5,
+  },  
   ratingContainer: {
     flex:1,
     flexDirection:'row',

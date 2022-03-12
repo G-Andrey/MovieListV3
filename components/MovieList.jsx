@@ -6,9 +6,11 @@ import IconDelete from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconEye from 'react-native-vector-icons/Ionicons';
 import { useToast } from 'react-native-styled-toast';
 import DraggableFlatList, {useOnCellActiveAnimation} from 'react-native-draggable-flatlist'
+import * as Haptics from 'expo-haptics';
 
 import NoMoviesFound from './NoMoviesFound';
 import MovieInfoModal from './MovieInfoModal';
+import { textAlign } from 'styled-system';
 
 const MovieList = (props) => { 
   const flatListRef = useRef()
@@ -39,6 +41,7 @@ const MovieList = (props) => {
   }, [props.handleScrollEnd, props.allMoviesList]);
 
   const onRightPress = (movieTitle) => {
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Medium)
     props.deleteMovie(movieTitle)
     toast({
       message: `${movieTitle} deleted`,
@@ -47,6 +50,7 @@ const MovieList = (props) => {
   };
 
   const handleSetWatched = (movieTitle) => {
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Medium)
     props.setWatched(movieTitle)
     toast({
       message: `${movieTitle} set as watched`,
@@ -57,6 +61,7 @@ const MovieList = (props) => {
   };
 
   const handleSetUnwatched = (movieTitle) => {
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Medium)
     props.setUnwatched(movieTitle)
     toast({
       message: `${movieTitle} set as unwatched`,
@@ -131,14 +136,19 @@ const MovieList = (props) => {
           onSwipeableLeftOpen={item.watchedState == 0 ? () => handleSetWatched(item.title) : (() => handleSetUnwatched(item.title))}
           renderRightActions={(progress, dragX) => <RightActions progress={progress} dragX={dragX} onPress={() => onRightPress(item.title)}/>}
         >   
+          <TouchableOpacity onLongPress={drag} activeOpacity={1}>
             <View style={[styles.rowView, {backgroundColor: isActive ? '#2e2e2e' : '#383838', borderColor: isActive ? 'white' : null, borderWidth: isActive ? 1 : 0}]}> 
               <View style={styles.titleAndDescriptionContainer}>
                 <TouchableOpacity onPress={() => setModalOn(item)} onLongPress={drag}>
                   <Text numberOfLines={2} style={styles.titleText}>
                     {item.title}
                   </Text>
-                  <Text numberOfLines={4} style={styles.descriptionText}>
-                    {item.description}
+                  <Text numberOfLines={3} style={[styles.descriptionText, {textAlign: item.description ? null: 'center'}]}>
+                    {item.description ? 
+                    item.description
+                    :
+                    "Could not find description"
+                    }
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -166,11 +176,15 @@ const MovieList = (props) => {
                   :
                     {color:"#ffd600"}
                   ]}>
-                  {item.rating}
+                  {isNaN(parseInt(item.rating)) ?
+                    "??"
+                      :
+                    parseInt(item.rating) + '%'
+                  }
                 </Text>
               </View>
             </View>
-          {/* </TouchableOpacity> */}
+          </TouchableOpacity>
         </Swipeable>
       </>
     );
@@ -180,6 +194,7 @@ const MovieList = (props) => {
     setMyData(data);
     //Update movielist in appjs with new indices
     props.updateListOrder(data);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
   }
 
   return(
@@ -191,6 +206,7 @@ const MovieList = (props) => {
             <DraggableFlatList
               ref={flatListRef}
               data={myData}
+              onDragBegin={() => Haptics.selectionAsync()}
               onDragEnd={({ data }) => onDragEnd(data)}
               keyExtractor={item => item.title}
               renderItem={renderItem}
@@ -199,7 +215,14 @@ const MovieList = (props) => {
                 {length: 150, offset: 155 * index, index}
               )}
             />
-            <MovieInfoModal isVisible={isModalVisible} modalOff={setModalOff} movieObj={currentMovie} updateUserMovieRating={handleUserRating} updateTitle={props.setNewTitle}/>         
+            <MovieInfoModal 
+              isVisible={isModalVisible} 
+              modalOff={setModalOff} 
+              movieObj={currentMovie} 
+              updateUserMovieRating={handleUserRating} 
+              updateTitle={props.setNewTitle}
+              updateComments={props.setNewComments}
+            />         
           </>
         }
     </View>
@@ -248,6 +271,7 @@ const styles = StyleSheet.create({
     overflow:"hidden",
     marginLeft:10,
     marginBottom:10,
+    // textAlign:'center'
   },
   verticalSeperator: {
     width:1,

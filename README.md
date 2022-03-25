@@ -30,6 +30,7 @@ https://user-images.githubusercontent.com/42978646/160171763-9e5d6b94-136d-4259-
   + Cast
   + Date movie was added to list
 - Long pressing movie title in modal makes it editable
+- Titles that are shows are marked with a "(s.)" in the name
 - Each movie object has its own user rating and user comment box
   + Users can set their own rating for the movie giving it 0-9 stars
   + Users can add their own comments to each movie, ie: what they thought about it, where they found out about it, ...

@@ -7,7 +7,9 @@ I decided to address this problem by creating Movie-List V3. Users can type in t
 
 ## Compelete App Demo 📽️
 https://user-images.githubusercontent.com/42978646/160171763-9e5d6b94-136d-4259-a85c-5526395c72f2.mp4
-
+- The demo above is a compressed and lower quality version to meet GitHub file size requirements. Full hd version can be found here: 
+  + [Raw MP4](https://github.com/G-Andrey/movie-list/blob/master/demo/MovieList_Demo_Full_HD.mp4)
+  + [Vimeo](https://vimeo.com/692351954/f5621fe07b)
 ## Major Implemented Features 🎉
 - Made movie search robust
   + Search titles don't have to be correctly spelled since the first layer of webscraping goes through google search
@@ -38,7 +40,8 @@ https://user-images.githubusercontent.com/42978646/160171763-9e5d6b94-136d-4259-
   + Movie/show added to list
   + Movie deleted
   + Movie marked as watched/unwatched
-  + Movie is in dragable state 
+  + Movie is in dragable state
+- If list is empty, eye emoji that wiggles is displayed 👀👀👀
 - Toast notifications for user feedback when events occur:
   + Webscraper found movie and added to list
   + Webscraper did not find movie

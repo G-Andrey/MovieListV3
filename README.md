@@ -6,7 +6,7 @@ I used to keep track of movies that I planned on watching via a simple notes app
 I decided to address this problem by creating Movie-List V3. Users can type in the name of any movie or show and a robust webscraper behind the scenes retrieves key details about that movie/show which are then saved in the list with persistant storage. Lists in the app are separated into 2 so users can keep track of movies they plan on watching as well as ones they have already seen. The app was built from the ground up with [React Native](https://reactnative.dev/) and implements modern touch controls amongst many other features.
 
 ## Compelete App Demo 📽️
-
+https://user-images.githubusercontent.com/42978646/160171763-9e5d6b94-136d-4259-a85c-5526395c72f2.mp4
 
 ## Major Implemented Features 🎉
 - Made movie search robust
@@ -30,6 +30,7 @@ I decided to address this problem by creating Movie-List V3. Users can type in t
   + Cast
   + Date movie was added to list
 - Long pressing movie title in modal makes it editable
+- Titles that are shows are marked with a "(s.)" in the name
 - Each movie object has its own user rating and user comment box
   + Users can set their own rating for the movie giving it 0-9 stars
   + Users can add their own comments to each movie, ie: what they thought about it, where they found out about it, ...
